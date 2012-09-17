@@ -4,8 +4,8 @@
   <head>
     <title>Gestion des inscriptions</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <link href="./styles/styles.css" rel="stylesheet" type="text/css" />
-    <link rel="shortcut icon" type="image/x-icon" href="./images/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./styles/dataTable.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="./styles/jquery.gritter.css" />

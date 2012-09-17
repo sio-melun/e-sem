@@ -33,13 +33,15 @@ table.dataTable tr.even_row {
 
 table.dataTable tr.odd_row:hover,
 table.dataTable tr.even_row:hover,
+table.dataTable tr.odd_row_atelier:hover,
+table.dataTable tr.even_row_atelier:hover,
 table.dataTable tr.odd_row:hover a,
 table.dataTable tr.even_row:hover a {
 	background-color: #FFD900;
 }
 
-table.dataTable tr.odd_row:hover a:hover,
-table.dataTable tr.even_row:hover a:hover {
+table.dataTable tr.odd_row:hover tr.odd_row_atelier:hover a:hover,
+table.dataTable tr.even_row:hover tr.even_row_atelier:hover a:hover {
 }
 
 table.dataTable th.dataTableHeader a,

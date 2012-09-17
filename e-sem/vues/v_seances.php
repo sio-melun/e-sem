@@ -103,7 +103,8 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
   <?php foreach ($seancesHoraire as $seance) :  ?>
    <?php $isChecked |= $seance['idParticipant'];?>
    <?php $oddEvenclass = ($seancesParalleles) ? $classSeancesParalleles : (($oddEvenclass == 'even_row') ? 'odd_row' : 'even_row');?>
-   <tr class='<?php echo $oddEvenclass ?>'> 
+   <?php $strClass = ($seance['type']=='atelier') ? '_atelier':''?>
+   <tr class='<?php echo $oddEvenclass.$strClass ?>'> 
 	 <td>
     <input id='cb<?php print($seance['id']) ?>' 
            type='<?php print($classInput) ?>' 
@@ -113,7 +114,7 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
      /> 
     </td>
 	 <td id='<?php print($seance['id']) ?>'><?php print($seance['dispo']) ?> / <?php print($seance['nbMax']) ?> </td>
-	 <td><?php print($seance['type']) ?></td>
+	 <td> <?php print($seance['type']) ?></td>
 	 <td><?php print($seance['dateHeureDebut']) ?> - <?php print($seance['dateHeureFin']) ?> </td>
    <td><?php print('('.$seance["numRelatif"] . ') ' . $seance['libelle']) ?> </td>
    <td><?php print($seance['intervenants']) ?> </td>
@@ -122,7 +123,7 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
   <?php endforeach; 
   // ajouter une option de raz pour les radios
   if ($seancesParalleles) : ?>
-     <tr class='<?php echo $oddEvenclass ?>'> 
+     <tr class='<?php echo $oddEvenclass.$strClass  ?>'> 
 	    <td>
     <input id='cbRAZ<?php print($oldIdS) ?>' 
            type='<?php print($classInput) ?>' 
