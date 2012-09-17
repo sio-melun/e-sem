@@ -44,9 +44,11 @@ else {
          else {
              $po->enreg($nom,$prenom,$mail,$academie,$titre);
              $pdo->envoyerMail($mail);
-         }
-             
+         }            
          break;
+     default :
+      	include('vues/v_login.php');
+      	break;
  }
  
 /*
