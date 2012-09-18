@@ -24,6 +24,12 @@ else {
         require('vues/v_seances.php');
         
         break;         
+     case 'mesinscriptions':
+        $lesSeances = $pdo->getSeancesMesBySeminaire($idSeminaire, $idParticipant);
+        $statNbInscr = $pdo->getNombreSeancesInscritesBy($idParticipant);
+        require('vues/v_seances.php');
+        
+        break;        
      case 'demandeInscription':
          $lesAcademies = $pdo->getLesAcademies();
          $lesAteliers = $pdo->getLesJoursCreneauxAteliers();

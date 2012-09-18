@@ -73,19 +73,70 @@ class PdoSeminaire{
 	}
 
 	
+	public function getSeancesMesBySeminaire($idSeminaire, $idParticipant) {
+		$sql = 'SELECT  idSeminaire, idParticipant, id, nbMax - count(idSeance) as dispo, nbMax, type, numRelatif, dateHeureDebut, dateHeureFin, libelle, intervenants FROM seance,inscription WHERE id = idSeance and idPArticipant=:idP group by id having  idSeminaire=:idSem ORDER BY dateHeureDebut, numRelatif';
+		$stmt = self::$monPdo->prepare($sql);
+		$stmt->bindParam(':idP', $idParticipant);
+		$stmt->bindParam(':idSem', $idSeminaire);
+			
+		$stmt->execute();
+		$tab = $stmt->fetchAll();
+		$desSeances = array();
+		$curJour = null;
+		foreach ($tab as $seance) :
+   		$j = self::jourFr(date("N", strtotime($seance['dateHeureDebut'])));
+		  $day = $j . ' ' . date("d-m-Y", strtotime($seance['dateHeureDebut']));
+		  if ($curJour != $day):
+		    $curJour = $day;
+		    $heureDeb = null;
+		    $desSeances[$curJour] = array();
+		  endif;
+		  $seance['realDateHeureDebut']= $seance['dateHeureDebut'];
+		  $seance['dateHeureDebut']= date("H:i", strtotime($seance['dateHeureDebut']));
+		  $seance['dateHeureFin']= date("H:i", strtotime($seance['dateHeureFin']));
+		  $heureDeb = $seance['dateHeureDebut'];
+    		// les seances sont stockees par jour et heureDeb
+		  $desSeances[$curJour][$heureDeb][] = $seance;
+		 endforeach;
+		 return $desSeances;
+	}
+	
+	public function getSeancesBySeminaire($idSeminaire, $idParticipant) {
+		$sql = 'SELECT  idSeminaire, idParticipant, id, nbMax - count(idSeance) as dispo, nbMax, type, numRelatif, dateHeureDebut, dateHeureFin, libelle, intervenants FROM seance left join inscription on id = idSeance and idPArticipant=:idP group by id having  idSeminaire=:idSem ORDER BY dateHeureDebut, numRelatif';
+		$stmt = self::$monPdo->prepare($sql);
+		$stmt->bindParam(':idP', $idParticipant);
+		$stmt->bindParam(':idSem', $idSeminaire);
+			
+		$stmt->execute();
+		$tab = $stmt->fetchAll();				
+		$desSeances = array();
+		$curJour = null;
+		foreach ($tab as $seance) :
+   		$j = self::jourFr(date("N", strtotime($seance['dateHeureDebut'])));
+		  $day = $j . ' ' . date("d-m-Y", strtotime($seance['dateHeureDebut']));
+		  if ($curJour != $day):
+		    $curJour = $day;
+		    $heureDeb = null;
+		    $desSeances[$curJour] = array();
+		  endif;
+		  $seance['realDateHeureDebut']= $seance['dateHeureDebut'];
+		  $seance['dateHeureDebut']= date("H:i", strtotime($seance['dateHeureDebut']));
+		  $seance['dateHeureFin']= date("H:i", strtotime($seance['dateHeureFin']));
+		  $heureDeb = $seance['dateHeureDebut'];
+    		// les seances sont stockees par jour et heureDeb
+		  $desSeances[$curJour][$heureDeb][] = $seance;
+		 endforeach;
+		 return $desSeances;
+		
+	}
+	
+	
 	/**
 	 * 
 	 * Enter description here ...
 	 * @param unknown_type $idParticipant
 	 */
-	public function getSeancesBySeminaire($idSeminaire, $idParticipant) {
-		$sql = 'SELECT  idSeminaire, idParticipant, id, nbMax - count(idSeance) as dispo, nbMax, type, numRelatif, dateHeureDebut, dateHeureFin, libelle, intervenants FROM seance left join inscription on id = idSeance and idPArticipant=:idP group by id having  idSeminaire=:idSem ORDER BY dateHeureDebut, numRelatif';
-	  $stmt = self::$monPdo->prepare($sql);
-		$stmt->bindParam(':idP', $idParticipant);
-		$stmt->bindParam(':idSem', $idSeminaire);
-				 
-		$stmt->execute();
-		$tab = $stmt->fetchAll();
+	private function _getSeancesBySeminaire($idSeminaire, $idParticipant, &$tab) {
 		$desSeances = array();
 		$curJour = null;
 		foreach ($tab as $seance) :
