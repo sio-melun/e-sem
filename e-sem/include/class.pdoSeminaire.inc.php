@@ -130,34 +130,7 @@ class PdoSeminaire{
 		
 	}
 	
-	
-	/**
-	 * 
-	 * Enter description here ...
-	 * @param unknown_type $idParticipant
-	 */
-	private function _getSeancesBySeminaire($idSeminaire, $idParticipant, &$tab) {
-		$desSeances = array();
-		$curJour = null;
-		foreach ($tab as $seance) :
-   		$j = self::jourFr(date("N", strtotime($seance['dateHeureDebut'])));
-		  $day = $j . ' ' . date("d-m-Y", strtotime($seance['dateHeureDebut']));
-		  if ($curJour != $day):
-		    $curJour = $day;
-		    $heureDeb = null;
-		    $desSeances[$curJour] = array();
-		  endif;
-		  $seance['realDateHeureDebut']= $seance['dateHeureDebut'];
-		  $seance['dateHeureDebut']= date("H:i", strtotime($seance['dateHeureDebut']));
-		  $seance['dateHeureFin']= date("H:i", strtotime($seance['dateHeureFin']));
-		  $heureDeb = $seance['dateHeureDebut'];
-    		// les seances sont stockees par jour et heureDeb
-		  $desSeances[$curJour][$heureDeb][] = $seance;
-		 endforeach;
-		 return $desSeances;
-	}
-
-	
+		
 	static function jourFr($jour){
 		$jours = array('Lundi','Mardi','Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
 		return $jours[$jour];
