@@ -16,8 +16,8 @@
 class PdoSeminaire{
 	private static $serveur='mysql:host=127.0.0.1';
 	private static $bdd='dbname=bd_seminaire';
-	private static $user='root' ;
-	private static $mdp='' ;
+  private static $user='seminaire';
+  private static $mdp='67vHVdpeWKGvqc4e';
 	private static $monPdo;
 	private static $monPdoSeminaire = null;
 	/**
@@ -217,4 +217,64 @@ class PdoSeminaire{
 		}
 		return TRUE;
   }
+  
+  
+  public function getLesAteliers($idSemi){
+  	$tab = array();
+  	try {
+  		$sql = "SELECT * FROM seance WHERE idSeminaire = :idS order by dateHeureDebut ASC";
+  		$stmt = self::$monPdo->prepare($sql);
+  		$stmt->bindParam(':idS', $idSemi);
+  		$stmt->execute();
+  		$tab = $stmt->fetchAll();
+  			
+  	} catch (Exception $e) {
+  		return FALSE;
+  	}
+  	return $tab;
+  }
+  
+  public function getLesInscrits($atelier, $seminaire){
+  	$tab = array();
+  	try {
+  		$sql = "SELECT participant.nom, participant.prenom, participant.mail, participant.titre, academie.nom acad, participer.priseEnCharge FROM participant, inscription, academie, participer WHERE participant.id = inscription.idParticipant AND idSeance = :IDS AND academie.id = participant.idAcademie AND participer.idParticipant = participant.id AND participer.idSeminaire = :IDSE";
+  		$stmt = self::$monPdo->prepare($sql);
+  		$stmt->bindParam(':IDS', $atelier);
+  		$stmt->bindParam(':IDSE', $seminaire);
+  		$stmt->execute();
+  		$tab = $stmt->fetchAll();
+  	} catch (Exception $e) {
+  		return FALSE;
+  	}
+  	return $tab;
+  }
+  
+  public function getNbInscritsAtelier($idAtelier){
+  	$resu = 0;
+  	try {
+  		$sql = "SELECT count(*) nombre FROM inscription WHERE idSeance = :idS";
+  		$stmt = self::$monPdo->prepare($sql);
+  		$stmt->bindParam(':idS', $idAtelier);
+  		$stmt->execute();
+  		$resu = $stmt->fetchObject();
+  	} catch (Exception $e) {
+  		return FALSE;
+  	}
+  	return $resu->nombre;
+  }
+  
+  public function getLesSeminaires(){
+  	$tab = array();
+  	try {  	
+  		$sql = "SELECT * from seminaire ORDER BY dateDebut DESC";
+  		$stmt = self::$monPdo->prepare($sql);
+  		$stmt->execute();
+  		$tab = $stmt->fetchAll();
+  	} catch (Exception $e) {
+  		return FALSE;
+  	}
+  	//echo var_dump($tab);
+  	return $tab;
+  }  
+  
 }

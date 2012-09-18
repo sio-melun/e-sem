@@ -1,3 +1,3 @@
 <div id="accueil">
-Description succinte du formulaire
+Description succinte de l'application
 </div>

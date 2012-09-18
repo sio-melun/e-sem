@@ -1,0 +1,3 @@
+<div id="apropos">
+Les développeurs et licence d'utilisation...
+</div>

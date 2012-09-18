@@ -2,7 +2,8 @@
 session_start();
 $_SESSION['idParticipant']=1;
 $idParticipant = $_SESSION['idParticipant'];
-$idSeminaire = 1;
+$_SESSION['isGestionnaire']=1;
+$idSeminaire = $_SESSION['isGestionnaire'];
 require('include/class.pdoSeminaire.inc.php');
 
 include('vues/v_entete.php');
@@ -46,6 +47,17 @@ else {
              $pdo->envoyerMail($mail);
          }            
          break;
+     case 'export':
+         	$lesSeminaires = $pdo->getLesSeminaires();        	
+         	include('vues/v_export.php');
+          break;
+     case 'accueil':         
+          include('vues/v_accueil.php');
+          break;
+     case 'apropos':           	   
+          include('vues/v_apropos.php');
+         	break;
+          		           
      default :
       	include('vues/v_login.php');
       	break;

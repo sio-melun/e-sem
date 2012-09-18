@@ -5,6 +5,7 @@
     <title>Gestion des inscriptions</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="styles/styles.css" />
+    <link rel="stylesheet" type="text/css" href="styles/jquery-ui.css" />
     <link rel="shortcut icon" type="image/x-icon" href="images/favicon.ico" />
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./styles/dataTable.css" media="screen" />
@@ -13,8 +14,25 @@
      <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>     
      <script type="text/javascript" src="js/jquery-ui-1.8.23.custom.min.js"></script>
      <script type="text/javascript" src="js/jquery.gritter.min.js"></script>
+     <script type="text/javascript" src="js/jquery_002.js"></script>
   </head>
   <body>
+  
+  <div id="menu">
+	<ul>
+		<li id="selected"><a href="index.php?action=accueil">Accueil</a></li>
+		<li><a href="index.php?action=login">Login</a></li>
+		<li><a href="index.php?action=mesinscriptions">Mes inscriptions</a></li>
+		<li><a href="index.php">Inscription</a></li>
+		<li><a href="index.php?action=export">Export</a></li>
+		<li><a href="index.php?action=apropos">A propos</a></li>
+  </ul>
+  </div>	
+
+<br/><br/>
+<script type="text/javascript">
+
+</script>
     <div id="page">
       <div id="entete">
         <!-- img src="./images/seminairelogo.jpg" id="logoseminaire" alt="seminaire" title="seminaire" / -->       
