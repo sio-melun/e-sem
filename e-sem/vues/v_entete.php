@@ -17,8 +17,8 @@
      <script type="text/javascript" src="js/jquery_002.js"></script>
   </head>
   <body>
-  
-  <div id="menu">
+  <div>
+  <nav>
 	<ul>
 		<li id="selected"><a href="index.php?action=accueil">Accueil</a></li>
 		<li><a href="index.php?action=login">Login</a></li>
@@ -27,9 +27,9 @@
 		<li><a href="index.php?action=export">Export</a></li>
 		<li><a href="index.php?action=apropos">A propos</a></li>
   </ul>
-  </div>	
-
-<br/><br/>
+  </nav>	
+</div>
+<br/>
 <script type="text/javascript">
 
 </script>
