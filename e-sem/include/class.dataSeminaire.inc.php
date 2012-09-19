@@ -11,10 +11,10 @@
 
 class DataSeminaire{   		
 /**
- * Fonction statique qui rÃ©cupÃ¨re les inscriptions des sÃ©ances (ateliers, tables rondes ou confÃ©rences)
- * @return retourne une chaine de caractÃ¨res destinÃ©e Ã  Ãªtre affichÃ©e dans un fichier CSV gÃ©nÃ©rÃ© par la page appelante.
+ * Fonction statique qui récupère les inscriptions des séances (ateliers, tables rondes ou conférences)  destiné à la génération d'un fichier CSV
+ * @return retourne une chaine de caractères destinée à être affichée dans un fichier CSV généré par la page appelante.
  */
-public static function extractInscriptionsAteliers($idSemi){
+public static function extractInscriptionsSeances($idSemi){
 		$liste = "JOURNEE;CRENEAU;SEANCE;PARTICIPANT;ACADEMIE;PRISE EN CHARGE;TITRE;COURRIEL\n";
 		$pdoSemi = PdoSeminaire::getInstance();
 		$lesSeances = $pdoSemi->getLesAteliers($idSemi);
@@ -41,8 +41,11 @@ public static function extractInscriptionsAteliers($idSemi){
 		endforeach;	
 		return $liste;  
 	}
-	
-	public static function extractEtatInscriptionsAteliers($idSemi){
+	/**
+	 * Fonction statique qui récupère les quantités d'inscription des séances (ateliers, tables rondes ou confÃ©rences) destiné à la génération d'un fichier CSV
+	 * @return retourne une chaine de caractères destinée à être affichée dans un fichier CSV généré par la page appelante.
+	 */
+	public static function extractEtatInscriptionsSeances($idSemi){
 		$liste = "JOURNEE;CRENEAU;SEANCE;CAPACITE;INSCRITS;PLACES RESTANTES\n";
 		$pdoSemi = PdoSeminaire::getInstance();
 		$lesSeances = $pdoSemi->getLesAteliers($idSemi);
@@ -62,7 +65,7 @@ public static function extractInscriptionsAteliers($idSemi){
 			$nbInscrits = $pdoSemi->getNbInscritsAtelier($seances['id']);;
 			$restant = $seances['nbMax'] - $nbInscrits;
 			$max = $seances['nbMax'];
-			if ($max == -1) { $max="IllimitÃ©"; $restant = "IllimitÃ©";}
+			if ($max == -1) { $max="Illimité"; $restant = "Illimité";}
 			
 			$liste .= ";;;".$max.";".$nbInscrits.";".$restant."\n";
 			$creneau = $seances['dateHeureDebut'];
