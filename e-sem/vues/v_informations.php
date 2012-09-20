@@ -59,22 +59,17 @@ return ok;
 	onSubmit="return verifier(this)">
 	<div class="corpsForm">
 		<input type="hidden" name="action" value="validerDemandeInscription" />
-		<div class="boxBody"> <legend>Vos informations personnelles</legend>
-			<p>
+		<fieldset class="boxBody"> <legend>Vos informations personnelles</legend>
+
 				<label for="nom">* Nom : </label> <input type="text" id="nom"
 					name="nom" size="30" maxlength="50" />
-			</p>
-			<p>
+
 				<label for="prenom">* Prénom : </label> <input type="text"
 					id="prenom" name="prenom" size="30" maxlength="50" />
-			</p>
-			<p>
 				<label for="mail">* Mail : </label> <input type="email" id="mail"
 					name="mail" size="30" maxlength="50" />
-			</p>
-			<p>
 				<label for="academie">Académie : </label> <select id="academie"
-					name="academie" size="1">
+					name="academie" size="1" class='cjComboBox' >
 					<?php
 					foreach ($lesAcademies as $uneAcademie) {
 	                           if($uneAcademie==$lesAcademies[0]){
@@ -83,6 +78,7 @@ return ok;
 						selected="selected">
 						<?php echo  $uneAcademie["nom"] ?>
 					</option>
+					<div>
 					<?php
 	                        }
 	                        else{
@@ -95,43 +91,34 @@ return ok;
 	                    }
 
 	                    ?>
-				</select>
-			</p>
-			<p>
+				</select>       
+			
 				<label for="residencepersonnelle">* Ville de la résidence
 					personnelle : </label> <input type="text" id="residencepersonnelle"
 					name="residencepersonnelle" size="30" maxlength="50" />
-			</p>
-			<p>
+				<br />		
 				<label for="residenceadministrative">* Ville de la résidence
 					administrative : </label> <input type="text"
 					id="residenceadministrative" name="residenceadministrative"
 					size="30" maxlength="50" />
-			</p>
-			<p>
-				<!--            <div class="radio">-->
-				<label for="titre">Titre : </label> <input type="radio" id="titre"
-					name="titre" value="professeur" checked>Professeur <input
-					type="radio" id="titre" name="titre" value="ipr">IA-IPR <input
-					type="radio" id="titre" name="titre" value="ien">IEN
-				<!--                </div> -->
-		
-		</div>
-		<!--            </div>-->
-		<!--            <div class="radio">-->
-		<br>
+				<br />
+				Titre : <input type="radio" id="titre"name="titre" value="professeur" checked/>Professeur 
+				<input type="radio" id="titre" name="titre" value="ipr">IA-IPR 
+				<input type="radio" id="titre" name="titre" value="ien">IEN
+			</div>
+			<br />
+		<fieldset>
 		<legend>Prise en charge du séminaire </legend>
-		<br>
-
 		<input type="radio" id="priseencharge" name="priseencharge"
 			value="academie" checked>Académie <input type="radio"
 			id="priseencharge" name="priseencharge" value="partenaire">Partenaire
 		<input type="radio" id="priseencharge" name="priseencharge"
 			value="autre">Autre
-
-
-		<!--</div>-->
-		</p>
+			</fieldset>
+</fieldset>
+  
+</div>
+</form>
 
 
 
