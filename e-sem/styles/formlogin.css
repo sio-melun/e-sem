@@ -29,7 +29,19 @@ body{
     margin:0 auto 30px;
 	overflow:hidden;
 }
-.box.login
+
+
+/* .corpsForm .boxbody{
+	height: 700px;
+} */
+.corpsForm label{
+	width: 200px;
+	display: block;
+	float: left;
+	padding: 3px;
+}
+
+.login
 {
 	height:260px; /*260px;*/
   width: 430px; /*332px;*/
@@ -38,12 +50,23 @@ body{
 	/*top:250px;*/
 	/*margin:-130px 0 0 -166px;*/
 }
+
+.inscription
+{
+  width: 800px; /*332px;*/
+	/*position:absolute;*/
+	/*left:40%;*/
+	/*top:250px;*/
+	/*margin:-130px 0 0 -166px;*/
+}
+.box, .inscription{
+	padding:10px 20px;
+}
 .boxBody
 {
     background:#fefefe;
     border-top:1px solid #dde0e8;
     border-bottom:1px solid #dde0e8;
-    padding:10px 20px;
 }
 
 .box footer
@@ -71,6 +94,7 @@ body{
 }
 .box input[type=text],
 .box input[type=password],
+.box input[type=email],
 .txtField,
 .cjComboBox
 {
@@ -88,6 +112,7 @@ body{
 }
 .box input[type=text]:focus,
 .box input[type=password]:focus,
+.box input[type=email]:focus,
 .txtField:focus,
 .cjComboBox:focus
 {
@@ -96,6 +121,7 @@ body{
     -webkit-box-shadow:2px 3px 3px rgba(0, 0, 0, 0.04) inset, 0 0 1px #0d6db6 inset;
     box-shadow:2px 3px 3px rgba(0, 0, 0, 0.04) inset, 0 0 1px #0d6db6 inset;
 	color:#333;
+	w
 }
 .cjComboBox
 {
@@ -161,3 +187,4 @@ footer#main{
 	font:normal 16px/22px Arial, Helvetica, sans-serif;
 	width:100%;
 }
+
