@@ -4,7 +4,7 @@ $idParticipant = 1;//empty($_SESSION['participant']) ? null : $_SESSION['partici
 $nomParticipant =  "NonTest";
 $prenomParticipant = "prénomTest";
 if (!$idParticipant) {
-  header('Location : index.php?action=login');
+  header('Location: index.php?action=login');
   exit(1);
 }
 ?>

@@ -10,6 +10,7 @@
     <link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="./styles/dataTable.css" media="screen" />
     <link rel="stylesheet" type="text/css" href="./styles/jquery.gritter.css" />
+    <link rel="stylesheet" type="text/css" href="./styles/formlogin.css" />
     
      <script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>     
      <script type="text/javascript" src="js/jquery-ui-1.8.23.custom.min.js"></script>
@@ -33,8 +34,8 @@
 <script type="text/javascript">
 
 </script>
-    <div id="page">
+    
       <div id="entete">
         <!-- img src="./images/seminairelogo.jpg" id="logoseminaire" alt="seminaire" title="seminaire" / -->       
-        <h1>Inscription au séminaire : Les Journées du management</h1>
+        <h2>séminaire : Les Journées du management</h2>
       </div>

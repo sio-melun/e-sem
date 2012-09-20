@@ -300,5 +300,30 @@ class PdoSeminaire{
   	//echo var_dump($tab);
   	return $tab;
   }  
+
+  /**
+   * Retourne un tableau 
+   *  $okUser[0] = $user object, $okUser[1] = cleok boolean
+   * @param string $email du participant 
+   * @param string $cle d'un formulaire
+   */
+  public function getUser($email, $cle) {
+  	$tab = array();
+  	try {
+  		$sql = "SELECT * FROM participant WHERE mail=:idM";
+  		$stmt = self::$monPdo->prepare($sql);
+  		$stmt->bindParam(':idM', $email);  		
+  		$stmt->execute();
+  		$user = $stmt->fetch(PDO::FETCH_OBJ);
+  		$okcle = ($cle == '123') ? true : false; 
+  		$tab = array(0=>$user, 1=>$okcle);
+  		//$res->cleOk = ($cle == '123');
+  		
+  	} catch (Exception $e) {
+  		return $tab = array(0=>null, 1=>null);
+  	}
+  	return $tab;
+  	 
+  }
   
 }
