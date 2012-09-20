@@ -33,10 +33,10 @@ else {
      case 'demandeInscription':
          $lesAcademies = $pdo->getLesAcademies();
          $lesAteliers = $pdo->getLesJoursCreneauxAteliers();
-         include('vues/v_formInscription.php');
+         include('vues/v_informations.php');
          
          break;
-     case 'validerDemandeInscription':
+      case 'validerDemandeInscription':
          $nom = $_REQUEST['nom'];
          $prenom=$_REQUEST['prenom'];
          $mail=$_REQUEST['mail'];
@@ -45,13 +45,18 @@ else {
          if(!verif($mail)){
             $lesAcademies = $pdo->getLesAcademies();
             $lesAteliers = $pdo->getLesJoursCreneauxAteliers();
-            include('vues/v_formInscription.php');   
+            include('vues/v_informations.php');   
             include('vues/v_erreurs.php');    
          }  
          else {
              $po->enreg($nom,$prenom,$mail,$academie,$titre);
              $pdo->envoyerMail($mail);
-         }            
+             $_SESSION['idParticipant']=1;
+             // etc.
+             header('Location : index.php?action=seances');
+             exit(1);
+         }
+             
          break;
      case 'export':
          	$lesSeminaires = $pdo->getLesSeminaires();        	
