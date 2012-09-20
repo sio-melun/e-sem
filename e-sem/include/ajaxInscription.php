@@ -5,7 +5,7 @@ session_start();
 // l'id du participant
 // on recoit l'id de la seance et le type d'opération (inscription ou déinscrption)
 
-if (empty($_SESSION['idParticipant']) || empty($_SESSION['idParticipant'])) :   
+if (empty($_SESSION['user'])) :   
    echo 'ACCES NON PREVU';
    exit(1);
 endif;
@@ -17,8 +17,9 @@ $inscription = (empty($_POST['inscrire'])) ? 'false' : $_POST['inscrire'];
 $dateHeureDebut = (empty($_POST['dateHeureDebut'])) ? null :$_POST['dateHeureDebut'];
 $raz = !empty($_POST['raz']);
 
-$idParticipant = $_SESSION['idParticipant'];   
-$idSeminaire = $_SESSION['idSeminaire'];
+$user = $_SESSION['user'];
+$idParticipant = $user->id;   
+$idSeminaire = 1;// $_SESSION['idSeminaire'];
 
 if ($idSeance && $idParticipant) :
  if ($raz) :

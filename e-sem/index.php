@@ -1,12 +1,8 @@
 <?php
 session_start();
-$_SESSION['idParticipant']=1;
-$idParticipant = $_SESSION['idParticipant'];
-$_SESSION['isGestionnaire']=1;
-$idSeminaire = $_SESSION['isGestionnaire'];
+$idSeminaire = 1;//$_SESSION['idSeminaire'];
 require('include/class.pdoSeminaire.inc.php');
 
-// include('vues/v_accueil.php');
 $pdo = PdoSeminaire::getInstance();
 
 if(!isset($_REQUEST['action'])){
@@ -26,16 +22,12 @@ switch($action){
 		$email = (empty($_POST['email']) ? null : $_POST['email']);
 		$cle   = (empty($_POST['cle']) ? null : $_POST['cle']);
 		$okUser = $pdo->getUser($email, $cle);
-		
-		//exit(1);
 		//$okUser[0] = $user object, $okUser[1] = cleok boolean
 		if (!$okUser[0]) {
 			if (!$okUser[1]) {
 				header('Location: index.php?action=login');
 				exit(1);
 			}else{
-			//	var_dump($okUser);
-// 			echo 'Oh?!!';
 				// on a le mel et la cle
 				// présente le formulaire d'enregistrement participant (non inscriptions !)
 				$_SESSION['cle'] = $cle;
@@ -43,21 +35,32 @@ switch($action){
 				exit(1);
 			}
 		}
-		$_SESSION['user'] = $user;
+		// ok, place l'objet user dans la session
+		$_SESSION['user'] = $okUser[0];
 		header('Location: index.php');
 		exit(1);
 		break;
 			
 	case 'seances':
-		$lesSeances = $pdo->getSeancesBySeminaire($idSeminaire, $idParticipant);
-		$statNbInscr = $pdo->getNombreSeancesInscritesBy($idParticipant);
+		if (empty($_SESSION['user'])) {
+			header('Location: index.php?action=login');
+			exit(1);
+		}
+		$user = $_SESSION['user'];				
+		$lesSeances = $pdo->getSeancesBySeminaire($idSeminaire, $user->id);
+		$statNbInscr = $pdo->getNombreSeancesInscritesBy($user->id);
 		include('vues/v_entete.php');
 		require('vues/v_seances.php');
 
 		break;
 	case 'mesinscriptions':
-		$lesSeances = $pdo->getSeancesMesBySeminaire($idSeminaire, $idParticipant);
-		$statNbInscr = $pdo->getNombreSeancesInscritesBy($idParticipant);
+		if (empty($_SESSION['user'])) {
+			header('Location: index.php?action=login');
+			exit(1);
+		}
+		$user = $_SESSION['user'];		
+		$lesSeances = $pdo->getSeancesMesBySeminaire($idSeminaire, $user->id);
+		$statNbInscr = $pdo->getNombreSeancesInscritesBy($user->id);
 		include('vues/v_entete.php');
 		require('vues/v_seances.php');
 

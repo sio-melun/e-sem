@@ -316,9 +316,7 @@ class PdoSeminaire{
   		$stmt->execute();
   		$user = $stmt->fetch(PDO::FETCH_OBJ);
   		$okcle = ($cle == '123') ? true : false; 
-  		$tab = array(0=>$user, 1=>$okcle);
-  		//$res->cleOk = ($cle == '123');
-  		
+  		$tab = array(0=>$user, 1=>$okcle);  		
   	} catch (Exception $e) {
   		return $tab = array(0=>null, 1=>null);
   	}

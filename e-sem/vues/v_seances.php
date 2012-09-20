@@ -1,12 +1,15 @@
 <?php
 session_start(); 
-$idParticipant = 1;//empty($_SESSION['participant']) ? null : $_SESSION['participant'];
-$nomParticipant =  "NonTest";
-$prenomParticipant = "prénomTest";
-if (!$idParticipant) {
-  header('Location: index.php?action=login');
-  exit(1);
+//var_dump($_SESSION);
+if (empty($_SESSION['user'])) {
+	header('Location: index.php?action=login');
+	exit(1);
 }
+$user = $_SESSION['user'];
+$idParticipant = $user->id;
+$nomParticipant =  $user->nom;
+$prenomParticipant = $user->prenom;
+
 ?>
 
 <script type='text/javascript'>
