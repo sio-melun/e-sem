@@ -24,7 +24,7 @@
 		<li id="selected"><a href="index.php?action=accueil">Accueil</a></li>
 		<li><a href="index.php?action=login">Login</a></li>
 		<li><a href="index.php?action=mesinscriptions">Mes inscriptions</a></li>
-		<li><a href="index.php">Inscription</a></li>
+		<li><a href="index.php?action=seances">Inscription</a></li>
 		<li><a href="index.php?action=export">Export</a></li>
 		<li><a href="index.php?action=apropos">A propos</a></li>
   </ul>

@@ -6,7 +6,7 @@ require('include/class.pdoSeminaire.inc.php');
 $pdo = PdoSeminaire::getInstance();
 
 if(!isset($_REQUEST['action'])){
-	$action = 'seances';
+	$action = 'login';
 }
 else {
 	$action = $_REQUEST['action'];
@@ -21,7 +21,7 @@ switch($action){
 	case 'doLogin' :
 		$email = (empty($_POST['email']) ? null : $_POST['email']);
 		$cle   = (empty($_POST['cle']) ? null : $_POST['cle']);
-		$okUser = $pdo->getUser($email, $cle);
+		$okUser = $pdo->getUser($email, $cle);		
 		//$okUser[0] = $user object, $okUser[1] = cleok boolean
 		if (!$okUser[0]) {
 			if (!$okUser[1]) {
@@ -37,7 +37,7 @@ switch($action){
 		}
 		// ok, place l'objet user dans la session
 		$_SESSION['user'] = $okUser[0];
-		header('Location: index.php');
+		header('Location: index.php?action=seances');
 		exit(1);
 		break;
 			
@@ -72,7 +72,7 @@ switch($action){
 			include('vues/v_entete.php');
 			include('vues/v_informations.php');
 		}else{
-			header('Location : index.php');
+			header('Location: index.php');
 			exit(1);
 		}
 			
@@ -95,7 +95,7 @@ switch($action){
 			$pdo->envoyerMail($mail);
 			$_SESSION['idParticipant']=1;
 			// etc.
-			header('Location : index.php?action=seances');
+			header('Location: index.php?action=seances');
 			exit(1);
 		}
 			
