@@ -74,8 +74,7 @@ switch($action){
 		}else{
 			header('Location: index.php');
 			exit(1);
-		}
-			
+		}			
 		break;
 	case 'validerDemandeInscription':
 		$nom = $_REQUEST['nom'];
@@ -97,8 +96,7 @@ switch($action){
 			// etc.
 			header('Location: index.php?action=seances');
 			exit(1);
-		}
-			
+		}		
 		break;
 	case 'export':
 		$lesSeminaires = $pdo->getLesSeminaires();
@@ -113,10 +111,12 @@ switch($action){
 		include('vues/v_entete.php');
 		include('vues/v_apropos.php');
 		break;
-			
-	default :
-		include('vues/v_entete.php');
-		include('vues/v_login.php');
+
+	case 'deconnexion' :	
+	default :  // deconnexion...
+		session_destroy();
+		header('location: index.php?action=login');
+		exit(1);
 		break;
 }
-?>
+

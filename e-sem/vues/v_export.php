@@ -1,14 +1,14 @@
 <?php
-$idParticipant = 1;//empty($_SESSION['participant']) ? null : $_SESSION['participant'];
-$isGestionnaire = $_SESSION['isGestionnaire'];
-$nomParticipant =  "NonTest";
-$prenomParticipant = "prénomTest";
-if (!$isGestionnaire) {
-  header('Location : index.php');
-  die ('Oups!');
+require 'checkUserIntoSession.php';
+
+// il faut au moind un role défini...
+// TODO a voir le ou lesquels !
+if (empty($user->role)) :
+  header('Location: index.php?action=login');
   exit(1);
-}
+endif;
 ?>
+
 <div>
 <form action="extractor.php" method="GET">
 	<table class="dataTable">

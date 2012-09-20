@@ -1,15 +1,5 @@
 <?php
-session_start(); 
-//var_dump($_SESSION);
-if (empty($_SESSION['user'])) {
-	header('Location: index.php?action=login');
-	exit(1);
-}
-$user = $_SESSION['user'];
-$idParticipant = $user->id;
-$nomParticipant =  $user->nom;
-$prenomParticipant = $user->prenom;
-
+require 'checkUserIntoSession.php';
 ?>
 
 <script type='text/javascript'>

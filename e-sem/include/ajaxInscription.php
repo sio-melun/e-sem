@@ -1,15 +1,6 @@
 <?php
 session_start();
-// dans la session on a 
-// l'id du seminaire
-// l'id du participant
-// on recoit l'id de la seance et le type d'opération (inscription ou déinscrption)
-
-if (empty($_SESSION['user'])) :   
-   echo 'ACCES NON PREVU';
-   exit(1);
-endif;
-
+require_once '../vues/checkUserIntoSession.php';
 require_once '../include/class.pdoSeminaire.inc.php';
  
 $idSeance = (empty($_POST['idSeance'])) ? null :$_POST['idSeance'];
