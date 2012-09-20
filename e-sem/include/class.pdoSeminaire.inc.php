@@ -16,8 +16,8 @@
 class PdoSeminaire{
 	private static $serveur='mysql:host=127.0.0.1';
 	private static $bdd='dbname=bd_seminaire';
-  private static $user='seminaire';
-  private static $mdp='67vHVdpeWKGvqc4e';
+  private static $user='toto';
+  private static $mdp='';
 	private static $monPdo;
 	private static $monPdoSeminaire = null;
 	/**
@@ -68,8 +68,13 @@ class PdoSeminaire{
 	 * @return un tableau d'academie
 	 */
 	public function getLesAcademies(){
-		$tab= array(1=>"creteil",2=>"paris",3=>"Versailles");
-		return $tab;
+		//$tab= array(1=>"Créteil",2=>"Paris",3=>"Versailles");
+		
+		$sql = 'SELECT * FROM academie';
+		$stmt = self::$monPdo->prepare($sql);
+		$stmt->execute();
+		$tab = $stmt->fetchAll();
+		return $tab;	
 	}
 
 	

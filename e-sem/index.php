@@ -119,9 +119,4 @@ switch($action){
 		include('vues/v_login.php');
 		break;
 }
-
-/*
- * To change this template, choose Tools | Templates
-* and open the template in the editor.
-*/
 ?>
