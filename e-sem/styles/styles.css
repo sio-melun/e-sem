@@ -30,6 +30,7 @@
   border-radius: 10px;
 }
 
+/*
 .event .category-item{
   display:-moz-inline-stack;
   display:inline-block;    
@@ -38,19 +39,24 @@
   background:url(../images/event_icons.png) no-repeat 0 0;
   font-size:12px
  }
-  
-  
+    
  .event .category-item.atelier{
    background-position:0 -20px
   }
+ */
  
  table.dataTable tr.odd_row_atelier {
   background-color: #eae3e3;
 }
- 
-  
+   
  table.dataTable tr.even_row_atelier { 
-    background-color: #f2f5f2;
+  background-color: #f2f5f2; 
+}
+
+.atelier {
+  padding:0 0 5px 25px; 
+  background-color: #f2f5f2;
+  background:url(../images/atelier.png) no-repeat 0 0; 
 }
 
 nav ul {

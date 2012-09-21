@@ -84,7 +84,8 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
 </thead>
 <tbody>	 
 <?php foreach ($seances as $seancesHoraire) :  ?>
-  <?php  $seancesParalleles = count($seancesHoraire) > 1; 
+  <?php  
+      $seancesParalleles = count($seancesHoraire) > 1; 
       if ($seancesParalleles) :
         $classSeancesParalleles = ($classSeancesParalleles=='odd_row') ? 'even_row' : 'odd_row';
         $classInput ='radio';
@@ -92,7 +93,7 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
       else:
         $classInput ='checkbox';
       endif; ?>
-   <?php $isChecked = false;?>       
+   <?php $isChecked = false; $numLigneMemeHoraire=0;?>       
   <?php foreach ($seancesHoraire as $seance) :  ?>
    <?php $isChecked |= $seance['idParticipant'];?>
    <?php $oddEvenclass = ($seancesParalleles) ? $classSeancesParalleles : (($oddEvenclass == 'even_row') ? 'odd_row' : 'even_row');?>
@@ -107,8 +108,8 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
      /> 
     </td>
 	 <td id='<?php print($seance['id']) ?>'><?php print($seance['dispo']) ?> / <?php print($seance['nbMax']) ?> </td>
-	 <td> <?php print($seance['type']) ?></td>
-	 <td><?php print($seance['dateHeureDebut']) ?> - <?php print($seance['dateHeureFin']) ?> </td>
+	 <td> <?php print($seance['type']);  echo ($seance['type']=='atelier') ? '  <img src="images/atelier.png" alt="atelier" height="20" width="20" />': '' ?></td>
+	 <td><?php if (++$numLigneMemeHoraire ==1) { print($seance['dateHeureDebut'] . ' - ' . $seance['dateHeureFin']); } ?> </td>
    <td><?php print('('.$seance["numRelatif"] . ') ' . $seance['libelle']) ?> </td>
    <td><?php print($seance['intervenants']) ?> </td>
    <?php $oldIdS = $seance['id']; $oldDateHeureDebut = $seance['dateHeureDebut'];?>
@@ -127,7 +128,7 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
     </td>
 	 <td>Non merci</td>
 	 <td> </td>
-	 <td><?php echo $oldDateHeureDebut ?></td>
+	 <td> </td>
    <td>Non merci</td>
    <td> </td>
   <?php endif;

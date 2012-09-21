@@ -25,7 +25,7 @@ if (!empty($_SESSION['user'])) {
   </head>
   <body>
   <header><?php if ($user): 
-     echo $user->nom . ' ' . $user->prenom; ?>
+     echo $user->prenom . ' ' . $user->nom; ?>
      <a href='index.php?action=deconnexion'>deconnexion</a> 
   <?php endif; ?>
   </header>
@@ -34,8 +34,9 @@ if (!empty($_SESSION['user'])) {
   <nav>
 	<ul>
 		<li id="selected"><a href="index.php?action=accueil">Accueil</a></li>
+    <?php if (!$user) :?>		
 		<li><a href="index.php?action=login">Login</a></li>
-		<?php if ($user) :?>
+		<?php else :?>
 		<li><a href="index.php?action=mesinscriptions">Mes inscriptions</a></li>
 		<li><a href="index.php?action=seances">Inscription</a></li>
 		   <?php if (!empty($user->role)) :?>

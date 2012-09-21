@@ -28,7 +28,7 @@ if ($idSeance && $idParticipant) :
    $resStat .= $etat['id'].";".$etat['dispo'] .' / ' . $etat['nbMax'];  
  endforeach;
   
- $n = PdoSeminaire::getInstance()->getNombreSeancesInscritesBy($idParticipant);
+ $n = PdoSeminaire::getInstance()->getNombreSeancesInscritesBy($idParticipant, $idSeminaire);
  // finir par le couple "nombreInscriptions;0" (zéro, une valeur quelconque pour assurer le couple final)
  // c'est pas top top, mais c'est efficace. Une version JSon serait certainement plus structurante (TODO) 
  $resStat.=';'.$n.';0';  
