@@ -1,5 +1,7 @@
 <?php
-require 'checkUserIntoSession.php';
+session_start();
+require_once 'checkUserIntoSession.php';
+
 if (empty($user->role)) :
   header('Location: index.php?action=login');
   exit(1);

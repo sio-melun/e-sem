@@ -118,6 +118,15 @@ switch($action){
 	/*	} */		
 		break;
 	case 'export':
+		if (empty($_SESSION['user'])) {
+			header('Location: index.php?action=login');
+			exit(1);
+		}
+		$user = $_SESSION['user'];
+		if (!$user->role) {
+			header('Location: index.php?action=login');
+			exit(1);
+		}
 		$lesSeminaires = $pdo->getLesSeminaires();
 		include('vues/v_entete.php');
 		include('vues/v_export.php');

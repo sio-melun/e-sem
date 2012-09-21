@@ -1,5 +1,8 @@
 <?php
-require 'checkUserIntoSession.php';
+session_start();
+
+require 'vues/checkUserIntoSession.php';
+
 
 // il faut au moind un role défini...
 // TODO a voir le ou lesquels !
@@ -10,7 +13,7 @@ endif;
 ?>
 
 <div>
-<form action="extractor.php" method="GET">
+<form action="extractor.php" method="post">
 	<table class="dataTable">
 		<tbody>	 
 			<tr><td>Choix du séminaire :</td>

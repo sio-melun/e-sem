@@ -1,5 +1,8 @@
 <?php
-require 'include/checkUserIntoSession.php';
+session_start();
+
+require 'vues/checkUserIntoSession.php';
+
 
 // il faut au moins un role défini...
 // TODO a voir le ou lesquels !
@@ -12,20 +15,20 @@ include('include/class.pdoSeminaire.inc.php');
 include('include/class.dataSeminaire.inc.php');
 
 $pdo = PdoSeminaire::getInstance();
-if(!isset($_REQUEST['action'])){
+if(!isset($_POST['action'])){
 	$action = 'csvFinale';
 }
 else {
-	$action = $_REQUEST['action'];
+	$action = $_POST['action'];
 }
 
 switch($action){
 	case 'csvFinale':
-		$lesInscriptions = DataSeminaire::extractInscriptionsAteliers($_GET['idSeminaire']);
+		$lesInscriptions = DataSeminaire::extractInscriptionsSeances(strip_tags($_POST['idSeminaire']));
 		require('vues/v_exportFinale.php');
 		break;
 	case 'csvEtat':
-		$lesInscriptions = DataSeminaire::extractEtatInscriptionsAteliers($_GET['idSeminaire']);
+		$lesInscriptions = DataSeminaire::extractEtatInscriptionsSeances(strip_tags($_POST['idSeminaire']));
 		require('vues/v_exportEtat.php');
 		break;
 	default :

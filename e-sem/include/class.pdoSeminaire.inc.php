@@ -232,7 +232,7 @@ class PdoSeminaire{
 	}
 
 
-	public function getLesAteliers($idSemi){
+	public function getLesSeances($idSemi){
 		$tab = array();
 		try {
 			$sql = "SELECT * FROM seance WHERE idSeminaire = :idS order by dateHeureDebut ASC";
