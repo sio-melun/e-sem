@@ -105,7 +105,7 @@ class PdoSeminaire{
 				$heureDeb = null;
 				$desSeances[$curJour] = array();
 			}
-			$seance['dispo'] = $seance['nbMax'] - $this->getNbInscritsSeance($seance['id']);
+			$seance['dispo'] = (int) ($seance['nbMax'] - $this->getNbInscritsSeance($seance['id']));
 			$seance['realDateHeureDebut']= $seance['dateHeureDebut'];
 			$seance['dateHeureDebut']= date("H:i", strtotime($seance['dateHeureDebut']));
 			$seance['dateHeureFin']= date("H:i", strtotime($seance['dateHeureFin']));
@@ -179,6 +179,7 @@ class PdoSeminaire{
 
 			self::$monPdo->commit();
 		} catch (Exception $e) {
+// 			self::$monPdo->rollback();
 			return FALSE;
 		}
 		return TRUE;
@@ -313,20 +314,53 @@ class PdoSeminaire{
 
 	}
 
-	public function enregParticipant($nom,$prenom,$mail,$academie, $resAdmi, $resDom, $titre){
+	public function enregParticipant($nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre){
 		try {
+			self::$monPdo->beginTransaction();			
 			$sql = "INSERT INTO participant(nom, prenom,mail,idAcademie,resAdministrative,resFamilliale,titre) VALUES (:Nom,  :Prenom, :Mail, :Academie, :ResAdmi, :ResDom, :Titre)";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':Nom', $nom);
 			$stmt->bindParam(':Prenom', $prenom);
 			$stmt->bindParam(':Mail', $mail);
-			$stmt->bindParam(':Academie', $academie);
+			$stmt->bindParam(':Academie', $idAcademie);
 			$stmt->bindParam(':Titre', $titre);
 			$stmt->bindParam(':ResAdmi', $resAdmi);
 			$stmt->bindParam(':ResDom', $resDom);
 			$stmt->execute();
+			
+			$idParticipant = self::$monPdo->lastInsertId();
+			// TODO idSeminaire
+			$idSeminaire = 1;
+			
+			$sql = "INSERT INTO participer VALUES (:idP,  :idS, null)";
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':idP', $idParticipant);
+			$stmt->bindParam(':idS', $idSeminaire);
+			$stmt->execute();
+			
+			self::$monPdo->commit();
 		} catch (Exception $e) {
-			echo $e->getMessage();
+	//		echo $e->getMessage();
+			return FALSE;
+		}
+		return TRUE;
+	}
+
+	public function majParticipant($id, $nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre){
+		try {
+			$sql = "UPDATE participant SET nom=:Nom, prenom=:Prenom,mail=:Mail,idAcademie=:Academie,resAdministrative=:ResAdmi,resFamilliale=:ResDom,titre=:Titre WHERE id=:idP";			
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':idP', $id);
+			$stmt->bindParam(':Nom', $nom);
+			$stmt->bindParam(':Prenom', $prenom);
+			$stmt->bindParam(':Mail', $mail);
+			$stmt->bindParam(':Academie', $idAcademie);
+			$stmt->bindParam(':Titre', $titre);
+			$stmt->bindParam(':ResAdmi', $resAdmi);
+			$stmt->bindParam(':ResDom', $resDom);
+			
+			$stmt->execute();
+		} catch (Exception $e) {
 			return FALSE;
 		}
 		return TRUE;

@@ -104,10 +104,11 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
            type='<?php print($classInput) ?>' 
            name='inscrire<?php echo ($seancesParalleles) ? $i : ''?>' 
            <?php echo ($seance['idParticipant']) ? 'checked' : ' '?> 
+           <?php if ($seance['dispo']<=0 && !$seance['idParticipant']) echo 'disabled' ?> 
            onClick='inscrSeance(<?php print($seance['id'])?>,"<?php print($seance['realDateHeureDebut']) ?>", "<?php print(substr($seance['libelle'],0, 25).'...')?>", this.checked, null )' 
      /> 
     </td>
-	 <td id='<?php print($seance['id']) ?>'><?php print($seance['dispo']) ?> / <?php print($seance['nbMax']) ?> </td>
+	 <td id='<?php print($seance['id']) ?>'><?php print($seance['dispo']) ?> / <?php print($seance['nbMax']) ?> <?php if ($seance['dispo']<=0) echo '(complet)'?> </td>
 	 <td> <?php print($seance['type']);  echo ($seance['type']=='atelier') ? '  <img src="images/atelier.png" alt="atelier" height="20" width="20" />': '' ?></td>
 	 <td><?php if (++$numLigneMemeHoraire ==1) { print($seance['dateHeureDebut'] . ' - ' . $seance['dateHeureFin']); } ?> </td>
    <td><?php print('('.$seance["numRelatif"] . ') ' . $seance['libelle']) ?> </td>

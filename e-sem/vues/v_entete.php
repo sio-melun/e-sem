@@ -24,9 +24,8 @@ if (!empty($_SESSION['user'])) {
      <script type="text/javascript" src="js/jquery_002.js"></script>
   </head>
   <body>
-  <header><?php if ($user): 
-     echo $user->prenom . ' ' . $user->nom; ?>
-     <a href='index.php?action=deconnexion'>deconnexion</a> 
+  <header><?php if ($user): ?></body>
+     <a href='index.php?action=majinfosperso'> <?php echo $user->prenom . ' ' . $user->nom; ?></a> :  <a href='index.php?action=deconnexion'>deconnexion</a> 
   <?php endif; ?>
   </header>
   <div>
