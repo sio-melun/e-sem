@@ -1,7 +1,7 @@
 <?php 
 session_start();
 $user = (empty($_SESSION['user'])) ? null : $_SESSION['user']; 
-$mail = (empty($_SESSION['doLogin_email'])) ? null :$_SESSION['doLogin_email'];
+$mailSession = (empty($_SESSION['doLogin_email'])) ? null :$_SESSION['doLogin_email'];
 if (!$user) {
 	if (!$mail) {
 	 header('Location: index.php?action=login');
@@ -10,7 +10,7 @@ if (!$user) {
 } 
 $nom = ($user) ? $user->nom : '';
 $prenom=($user) ? $user->prenom : '';
-$mail=($user) ? $user->mail : '';
+$mail= ($user) ? $user->mail : $mailSession;
 $titre=($user) ? $user->titre : '';
 $idAcademie = ($user) ? $user->idAcademie : '';
 $residencepersonnelle=($user) ? $user->resFamilliale : '';
