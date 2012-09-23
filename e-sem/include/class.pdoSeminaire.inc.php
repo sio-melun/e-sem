@@ -316,7 +316,7 @@ class PdoSeminaire{
 			$okcle = !empty($seminaire);// ($cle == '123') ? true : false;
 				
 			if ($user && $okcle) {
-				$sql = "SELECT priseEnCharge FROM participer WHERE idSeminaire=:idS AND idParticipant=:idP";
+				$sql = "SELECT priseEnCharge FROM participer WHERE idSeminaire=:idS AND idParticipant=:idP";				
 				$stmt = self::$monPdo->prepare($sql);
 				$stmt->bindParam(':idS', $seminaire->id);
 				$stmt->bindParam(':idP', $user->id);
@@ -383,10 +383,11 @@ class PdoSeminaire{
 			//TODO valeur par défaut ?? no !
 			$idSeminaire = (empty($user->seminaire)) ? 1 : $user->seminaire->id;
 				
-			$sql = "UPDATE participer SET priseEnCharge=:PriseEnCharge WHERE idPariticapnt=:idP AND idSeminaire=:idS)";
+			$sql = "UPDATE participer SET priseEnCharge=:PriseEnCharge WHERE idParticipant=:idP AND idSeminaire=:idS";
+//  			die($sql . ' (v= ' .$priseEnCharge . 'idP =' . $user->id.' idS=' .$idSeminaire .')');
 			$stmt = self::$monPdo->prepare($sql);
-			$stmt->bindParam(':PriseEnCharge', $prisencharge);
-			$stmt->bindParam(':idP', $id);
+			$stmt->bindParam(':PriseEnCharge', $priseEnCharge);
+			$stmt->bindParam(':idP', $user->id);
 			$stmt->bindParam(':idS', $idSeminaire);
 			$stmt->execute();
 

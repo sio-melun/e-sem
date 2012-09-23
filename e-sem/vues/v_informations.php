@@ -15,8 +15,7 @@ $titre=($user) ? $user->titre : '';
 $idAcademie = ($user) ? $user->idAcademie : '';
 $residencepersonnelle=($user) ? $user->resFamilliale : '';
 $residenceadministrative=($user) ? $user->resAdministrative : '';
-$priseencharge=($user->participer) ? $user->participer->priseEnCharge : '';
- 
+$priseencharge= (!empty($user->participer)) ? $user->participer->priseEnCharge : '';
 ?>
 			
 <form class="box inscription" method="POST" action="index.php"
