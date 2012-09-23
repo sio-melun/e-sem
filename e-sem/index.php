@@ -83,9 +83,9 @@ switch($action){
 		
 	case 'majinfosperso':		
 	case 'demandeInscription':
-		if (!empty($_SESSION['cle']) && !empty($_SESSION['user'])) {
+		if (!empty($_SESSION['cle'])){// && !empty($_SESSION['user'])) {
 			$lesAcademies = $pdo->getLesAcademies();
-			include('vues/v_entete.php');
+			include('vues/v_entete.php');			
 			include('vues/v_informations.php');
 		}else{
 			header('Location: index.php');
