@@ -82,7 +82,7 @@ switch($action){
 		
 	case 'majinfosperso':		
 	case 'demandeInscription':
-		if ($_SESSION['cle'] || !empty($_SESSION['user'])) {
+		if (!empty($_SESSION['cle']) || !empty($_SESSION['user'])) {
 			$lesAcademies = $pdo->getLesAcademies();
 			include('vues/v_entete.php');
 			include('vues/v_informations.php');
@@ -99,6 +99,7 @@ switch($action){
 		$academie = strip_tags($_POST['academie']);
 		$residencepersonnelle=strip_tags($_POST['residencepersonnelle']);
 		$residenceadministrative=strip_tags($_POST['residenceadministrative']);
+		$priseEnCharge=strip_tags($_POST['priseencharge']);
 		if (!$nom || !$prenom || !$mail || !$titre || !$academie || !$residenceadministrative || !$residencepersonnelle ){
 			header('Location: index.php?action=login');
 			exit(1);
@@ -106,15 +107,15 @@ switch($action){
 		if (empty($_SESSION['user'])) {
 			// vérifier si le mail n'est pas déjà enregistré
 			$okUser = $pdo->getUser($mail, $_SESSION['cle']);
-	    if (!$okUser[0]) {
-	  	  // nouveau participant
-	  	  $pdo->enregParticipant($nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre);
+	    if (!$okUser[0] && $okUser[1]) {
+	  	  // nouveau participant avec clé de séminaire valide
+	  	  $pdo->enregParticipant($nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre, $priseEnCharge);
   	  	//$pdo->envoyerMail($mail);
 	    }
 		} else {
 			//mis à jour
 			$user = $_SESSION['user'];
-			$pdo->majParticipant($user->id, $nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre);
+			$pdo->majParticipant($user, $nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre, $priseEnCharge);
 		}	
 		$okUser = $pdo->getUser($mail, $_SESSION['cle']);
 		if ($okUser[0]) {

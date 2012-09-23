@@ -1,6 +1,10 @@
 <?php
 session_start();
-require_once '../vues/checkUserIntoSession.php';
+if (empty($_SESSION['user'])){
+	echo "0;0";
+	exit;
+}
+
 require_once '../include/class.pdoSeminaire.inc.php';
  
 $idSeance = (empty($_POST['idSeance'])) ? null :$_POST['idSeance'];

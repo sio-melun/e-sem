@@ -15,7 +15,7 @@
 
 class PdoSeminaire{
 	private static $serveur='mysql:host=127.0.0.1';
-	private static $bdd='dbname=bd_seminaire';
+	private static $bdd='dbname=seminaire';
 	private static $user='seminaire';
 	private static $mdp='67vHVdpeWKGvqc';
 	private static $monPdo;
@@ -114,10 +114,10 @@ class PdoSeminaire{
 			$desSeances[$curJour][$heureDeb][] = $seance;
 		}
 		return $desSeances;
-	
+
 	}
-	
-	
+
+
 
 	static function jourFr($jour){
 		$jours = array('Lundi','Mardi','Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
@@ -179,7 +179,7 @@ class PdoSeminaire{
 
 			self::$monPdo->commit();
 		} catch (Exception $e) {
-// 			self::$monPdo->rollback();
+			// 			self::$monPdo->rollback();
 			return FALSE;
 		}
 		return TRUE;
@@ -293,7 +293,7 @@ class PdoSeminaire{
 
 	/**
 	 * Retourne un tableau
-	 *  $okUser[0] = $user object, $okUser[1] = cleok boolean
+	 *  $okUser[0] = $user object, $okUser[1] = seminaire object
 	 * @param string $email du participant
 	 * @param string $cle d'un seminaire
 	 */
@@ -305,7 +305,25 @@ class PdoSeminaire{
 			$stmt->bindParam(':idM', $email);
 			$stmt->execute();
 			$user = $stmt->fetch(PDO::FETCH_OBJ);
-			$okcle = ($cle == '123') ? true : false;
+				
+			$sql = "SELECT * FROM seminaire WHERE cle=:idCle";
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':idCle', $cle);
+			$stmt->execute();
+			$seminaire = $stmt->fetch(PDO::FETCH_OBJ);
+			if ($user) $user->seminaire=$seminaire;
+				
+			$okcle = !empty($seminaire);// ($cle == '123') ? true : false;
+				
+			if ($user && $okcle) {
+				$sql = "SELECT priseEnCharge FROM participer WHERE idSeminaire=:idS AND idParticipant=:idP";
+				$stmt = self::$monPdo->prepare($sql);
+				$stmt->bindParam(':idS', $seminaire->id);
+				$stmt->bindParam(':idP', $user->id);
+				$stmt->execute();
+				$participer = $stmt->fetch(PDO::FETCH_OBJ);
+				$user->participer=$participer;
+			}
 			$tab = array(0=>$user, 1=>$okcle);
 		} catch (Exception $e) {
 			return $tab = array(0=>null, 1=>null);
@@ -314,9 +332,9 @@ class PdoSeminaire{
 
 	}
 
-	public function enregParticipant($nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre){
+	public function enregParticipant($nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre, $prisencharge){
 		try {
-			self::$monPdo->beginTransaction();			
+			self::$monPdo->beginTransaction();
 			$sql = "INSERT INTO participant(nom, prenom,mail,idAcademie,resAdministrative,resFamilliale,titre) VALUES (:Nom,  :Prenom, :Mail, :Academie, :ResAdmi, :ResDom, :Titre)";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':Nom', $nom);
@@ -327,30 +345,32 @@ class PdoSeminaire{
 			$stmt->bindParam(':ResAdmi', $resAdmi);
 			$stmt->bindParam(':ResDom', $resDom);
 			$stmt->execute();
-			
+				
 			$idParticipant = self::$monPdo->lastInsertId();
 			// TODO idSeminaire
-			$idSeminaire = 1;
-			
-			$sql = "INSERT INTO participer VALUES (:idP,  :idS, null)";
+			$idSeminaire = (empty($_SESSION['idSeminaire'])) ? 1 : $_SESSION['idSeminaire'];
+
+			$sql = "INSERT INTO participer VALUES (:idP,  :idS, :PriseEnCharge)";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':idP', $idParticipant);
 			$stmt->bindParam(':idS', $idSeminaire);
+			$stmt->bindParam(':PriseEnCharge', $prisencharge);
+				
 			$stmt->execute();
-			
+				
 			self::$monPdo->commit();
 		} catch (Exception $e) {
-	//		echo $e->getMessage();
+			//		echo $e->getMessage();
 			return FALSE;
 		}
 		return TRUE;
 	}
 
-	public function majParticipant($id, $nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre){
+	public function majParticipant($user, $nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre, $priseEnCharge){
 		try {
-			$sql = "UPDATE participant SET nom=:Nom, prenom=:Prenom,mail=:Mail,idAcademie=:Academie,resAdministrative=:ResAdmi,resFamilliale=:ResDom,titre=:Titre WHERE id=:idP";			
+			$sql = "UPDATE participant SET nom=:Nom, prenom=:Prenom,mail=:Mail,idAcademie=:Academie,resAdministrative=:ResAdmi,resFamilliale=:ResDom,titre=:Titre WHERE id=:idP";
 			$stmt = self::$monPdo->prepare($sql);
-			$stmt->bindParam(':idP', $id);
+			$stmt->bindParam(':idP', $user->id);
 			$stmt->bindParam(':Nom', $nom);
 			$stmt->bindParam(':Prenom', $prenom);
 			$stmt->bindParam(':Mail', $mail);
@@ -358,8 +378,18 @@ class PdoSeminaire{
 			$stmt->bindParam(':Titre', $titre);
 			$stmt->bindParam(':ResAdmi', $resAdmi);
 			$stmt->bindParam(':ResDom', $resDom);
-			
 			$stmt->execute();
+
+			//TODO valeur par défaut ?? no !
+			$idSeminaire = (empty($user->seminaire)) ? 1 : $user->seminaire->id;
+				
+			$sql = "UPDATE participer SET priseEnCharge=:PriseEnCharge WHERE idPariticapnt=:idP AND idSeminaire=:idS)";
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':PriseEnCharge', $prisencharge);
+			$stmt->bindParam(':idP', $id);
+			$stmt->bindParam(':idS', $idSeminaire);
+			$stmt->execute();
+
 		} catch (Exception $e) {
 			return FALSE;
 		}

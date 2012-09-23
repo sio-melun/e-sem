@@ -1,9 +1,9 @@
 <?php 
-session_start();
+if(!isset($_SESSION)) { session_start(); }
 $user = (empty($_SESSION['user'])) ? null : $_SESSION['user']; 
 $mailSession = (empty($_SESSION['doLogin_email'])) ? null :$_SESSION['doLogin_email'];
 if (!$user) {
-	if (!$mail) {
+	if (!$mailSession) {
 	 header('Location: index.php?action=login');
 	 exit(1);
 	}
@@ -15,6 +15,7 @@ $titre=($user) ? $user->titre : '';
 $idAcademie = ($user) ? $user->idAcademie : '';
 $residencepersonnelle=($user) ? $user->resFamilliale : '';
 $residenceadministrative=($user) ? $user->resAdministrative : '';
+$priseencharge=($user->participer) ? $user->participer->priseEnCharge : '';
  
 ?>
 			
@@ -59,10 +60,9 @@ $residenceadministrative=($user) ? $user->resAdministrative : '';
 		<fieldset>
 		<legend>Prise en charge du séminaire </legend>
 		<input type="radio" id="priseencharge" name="priseencharge"
-			value="academie" checked>Académie <input type="radio"
-			id="priseencharge" name="priseencharge" value="partenaire">Partenaire
-		<input type="radio" id="priseencharge" name="priseencharge"
-			value="autre">Autre
+			value="academie" <?php if ($priseencharge=='academie') echo 'checked' ?>>Académie <input type="radio"
+			id="priseencharge" name="priseencharge" value="partenaire" <?php if ($priseencharge=='partenaire') echo 'checked' ?>>Partenaire
+		<input type="radio" id="priseencharge" name="priseencharge" value="autre" <?php if ($priseencharge=='autre') echo 'checked' ?>>Autre
 			</fieldset>
 </fieldset>
 </div>

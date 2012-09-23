@@ -24,12 +24,12 @@ function inscrSeance(idSeance, heureDeb, description, checked, raz) {
     $.ajax({
      type: "POST",
      url: "include/ajaxInscription.php",
-     data: "idSeance="+ <?php echo idSeance ?>+"&inscrire="+checked+"&dateHeureDebut="+heureDeb+razInscr, 
+     data: "idSeance="+idSeance+"&inscrire="+checked+"&dateHeureDebut="+heureDeb+razInscr, 
      error:function(msg){ 
        alert( "Error ! " + msg);       
      },
      success:function(data){
-         //alert(data); return;
+       // alert(data); return;
        //data = "idSeance;stat dispo/max;idSeance;stat dispo/max" etc.
        // (fonctionnement général pour checkbox et radio bouton)              
        var tabRadio = data.split(";");

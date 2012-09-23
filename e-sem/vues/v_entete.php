@@ -1,4 +1,4 @@
-﻿<?php session_start();
+﻿<?php   
 $user=null;
 if (!empty($_SESSION['user'])) {
 	$user = $_SESSION['user'];
@@ -24,7 +24,7 @@ if (!empty($_SESSION['user'])) {
      <script type="text/javascript" src="js/jquery_002.js"></script>
   </head>
   <body>
-  <header><?php if ($user): ?></body>
+  <header><?php if ($user): ?>
      <a href='index.php?action=majinfosperso'> <?php echo $user->prenom . ' ' . $user->nom; ?></a> :  <a href='index.php?action=deconnexion'>deconnexion</a> 
   <?php endif; ?>
   </header>
