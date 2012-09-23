@@ -323,6 +323,7 @@ class PdoSeminaire{
 				$stmt->execute();
 				$participer = $stmt->fetch(PDO::FETCH_OBJ);
 				$user->participer=$participer;
+
 			}
 			$tab = array(0=>$user, 1=>$okcle);
 		} catch (Exception $e) {

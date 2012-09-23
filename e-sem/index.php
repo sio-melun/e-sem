@@ -52,6 +52,7 @@ switch($action){
 		}
 		// ok, place l'objet user dans la session
 		$_SESSION['user'] = $okUser[0];
+		$_SESSION['cle'] = $cle;
 		header('Location: index.php?action=seances');
 		exit(1);
 		break;
@@ -82,7 +83,7 @@ switch($action){
 		
 	case 'majinfosperso':		
 	case 'demandeInscription':
-		if (!empty($_SESSION['cle']) || !empty($_SESSION['user'])) {
+		if (!empty($_SESSION['cle']) && !empty($_SESSION['user'])) {
 			$lesAcademies = $pdo->getLesAcademies();
 			include('vues/v_entete.php');
 			include('vues/v_informations.php');
@@ -116,6 +117,7 @@ switch($action){
 			//mis à jour
 			$user = $_SESSION['user'];
 			$pdo->majParticipant($user, $nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre, $priseEnCharge);
+			$mail = $user->mail;			
 		}	
 		$okUser = $pdo->getUser($mail, $_SESSION['cle']);
 		if ($okUser[0]) {
