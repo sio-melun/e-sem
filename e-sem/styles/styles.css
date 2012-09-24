@@ -59,7 +59,22 @@
   background:url(../images/atelier.png) no-repeat 0 0; 
 }
 
+div#navigation  {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50em;
+}   
+   
 
+div#entete  {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50em;
+}   
+      
+   
+   
+   
 nav ul {
 padding:0;
 margin:0;

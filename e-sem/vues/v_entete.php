@@ -28,7 +28,8 @@ if (!empty($_SESSION['user'])) {
      <a href='index.php?action=majinfosperso'> <?php echo $user->prenom . ' ' . $user->nom; ?></a> :  <a href='index.php?action=deconnexion'>deconnexion</a> 
   <?php endif; ?>
   </header>
-  <div>
+  
+  <div id='navigation'>
   
   <nav>
 	<ul>
@@ -50,8 +51,8 @@ if (!empty($_SESSION['user'])) {
 <script type="text/javascript">
 
 </script>
-    
-      <div id="entete">
+    <br/>
+      <div id="entete">       
         <!-- img src="./images/seminairelogo.jpg" id="logoseminaire" alt="seminaire" title="seminaire" / -->       
-        <h2>séminaire : Les Journées du management</h2>
+        <h3>séminaire : Les Journées du management</h3>
       </div>

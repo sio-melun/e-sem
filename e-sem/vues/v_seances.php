@@ -74,7 +74,7 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
 
 <div id="content">
 
-<?php $i=0; $classSeancesParalleles='odd_row'?>
+<?php $i=0; $classSeancesParalleles='odd_row'; $oddEvenclass='event_row'?>
 <?php foreach ($lesSeances as $jour => $seances) : ?>
 <h3><a href="#"><?php print($jour) ?></a></h3>
 <div>
