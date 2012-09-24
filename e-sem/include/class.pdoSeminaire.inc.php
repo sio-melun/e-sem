@@ -253,17 +253,17 @@ class PdoSeminaire{
 	}
 
 	public function getSeminaireByCle($cle){
-		$tab = array();
+		$obj = null;
 		try {
 			$sql = "SELECT * FROM seminaire WHERE cle = :Cle";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':Cle', $cle);
 			$stmt->execute();
-			$tab = $stmt->fetch();	
+			$obj = $stmt->fetch(PDO::FETCH_OBJ);	
 		} catch (Exception $e) {
 			return FALSE;
 		}
-		return $tab;
+		return $obj;
 	}
 	
 	
@@ -285,7 +285,7 @@ class PdoSeminaire{
 	public function getNbInscritsSeance($idSeance){
 		$resu = 0;
 		try {
-			$sql = "SELECT count(*) nombre FROM inscription WHERE idSeance = :idS";
+			$sql = "SELECT count(*) AS nombre FROM inscription WHERE idSeance = :idS";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':idS', $idSeance);
 			$stmt->execute();
@@ -295,6 +295,21 @@ class PdoSeminaire{
 		}
 		return $resu->nombre;
 	}
+	
+	public function getNbInscritsSeminaire($idSeminaire){
+		$resu = 0;
+		try {
+			$sql = "SELECT count(*) AS nombre FROM participer WHERE idSeminaire = :idS";
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':idS', $idSeminaire);
+			$stmt->execute();
+			$resu = $stmt->fetchObject();
+		} catch (Exception $e) {
+			return FALSE;
+		}
+		return $resu->nombre;
+	}
+	
 
 	public function getLesSeminaires(){
 		$tab = array();
@@ -417,8 +432,7 @@ class PdoSeminaire{
 		return TRUE;
 	}
 
-	public function envoyerMail(){
-		$seminaire = (empty($_SESSION['cle']) ? null : $this->getSeminaireByCle($_SESSION['cle']));
+	public function envoyerMail(){		
 		$headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		$headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		//$headers .= self::$CC_MAIL_CREATION_COMPTE . "\n";
@@ -428,8 +442,12 @@ class PdoSeminaire{
 		$objet = "[e-seminaire] CREATION COMPTE";
 		$user = (empty($_SESSION['user'])) ? null : $_SESSION['user'];  
 		if ($user) {
-		 $message = "Inscription d'un nouveau participant : " . $user->prenom . ' ' . $user->nom;
-		 if ($seminaire) $message .= "\nPour le seminaire : " . $seminaire->nom;
+		 $message = "Inscription d'un nouveau participant.";
+		 if ($user->seminaire) {
+		 	$message .= "\nPour le seminaire : " . $user->seminaire->nom;
+		 	$message .= ' ('. $this->getNbInscritsSeminaire($user->seminaire->id).' participant(s))';
+		 }
+		 $message .= "\nNom : " . $user->prenom . ' ' . $user->nom;
 		 $message .= "\nemail: " .$user->mail;
 		 $message .= "\nDate : " . date('d-m-Y  H:i');		  		  		  
 		 //die('dest:'.$destinataire . ' obj:'. $objet. ' msg: '. $message. ' headers:'. $headers); 

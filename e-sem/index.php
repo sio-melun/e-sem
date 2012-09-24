@@ -105,6 +105,7 @@ switch($action){
 			header('Location: index.php?action=login');
 			exit(1);
 		}
+		$majUser= false;
 		if (empty($_SESSION['user'])) {
 			// vérifier si le mail n'est pas déjà enregistré
 			$okUser = $pdo->getUser($mail, $_SESSION['cle']);
@@ -115,14 +116,16 @@ switch($action){
 	    }
 		} else {
 			//mis à jour
+			$majUser = true;
 			$user = $_SESSION['user'];
 			$pdo->majParticipant($user, $nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre, $priseEnCharge);
 			$mail = $user->mail;			
 		}	
 		$okUser = $pdo->getUser($mail, $_SESSION['cle']);
-		if ($okUser[0]) {
+		if ($okUser[0]) {			
 			$_SESSION['user']=$okUser[0];
-			$pdo->envoyerMail();
+			if (!$majUser) // creation => envoi de mail
+				$pdo->envoyerMail();
 			header('Location: index.php?action=seances');
 			exit(1);
 		} else {			
