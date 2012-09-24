@@ -17,7 +17,7 @@ class PdoSeminaire{
 	private static $serveur='mysql:host=127.0.0.1';
 	private static $bdd='dbname=seminaire';
 	private static $user='seminaire';
-	private static $mdp='67vHVdpeWKGvqc';
+	private static $mdp='67vHVdpeWKGvqc4e';
 	private static $monPdo;
 	private static $monPdoSeminaire = null;
 	/**
