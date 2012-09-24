@@ -435,7 +435,7 @@ class PdoSeminaire{
 	public function envoyerMail(){		
 		$headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		$headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
-		//$headers .= self::$CC_MAIL_CREATION_COMPTE . "\n";
+		$headers .= self::$CC_MAIL_CREATION_COMPTE . "\n";
 		$headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		$headers .='Content-Transfer-Encoding: 8bit';
 		$destinataire = self::$DEST_MAIL_CREATION_COMPTE;
