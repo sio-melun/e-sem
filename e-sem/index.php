@@ -122,6 +122,7 @@ switch($action){
 		$okUser = $pdo->getUser($mail, $_SESSION['cle']);
 		if ($okUser[0]) {
 			$_SESSION['user']=$okUser[0];
+			$pdo->envoyerMail();
 			header('Location: index.php?action=seances');
 			exit(1);
 		} else {			

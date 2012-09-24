@@ -24,13 +24,13 @@ if (!empty($_SESSION['user'])) {
      <script type="text/javascript" src="js/jquery_002.js"></script>
   </head>
   <body>
+  
   <header><?php if ($user): ?>
-     <a href='index.php?action=majinfosperso'> <?php echo $user->prenom . ' ' . $user->nom; ?></a> :  <a href='index.php?action=deconnexion'>deconnexion</a> 
+     <a href='index.php?action=majinfosperso'> <?php echo $user->prenom . ' ' . $user->nom; ?></a> :  <a href='index.php?action=deconnexion'>deconnexion</a>      
   <?php endif; ?>
   </header>
   
-  <div id='navigation'>
-  
+  <div id='navigation'>  
   <nav>
 	<ul>
 		<li id="selected"><a href="index.php?action=accueil">Accueil</a></li>
@@ -52,7 +52,7 @@ if (!empty($_SESSION['user'])) {
 
 </script>
     <br/>
-      <div id="entete">       
+      <div id="titre">       
         <!-- img src="./images/seminairelogo.jpg" id="logoseminaire" alt="seminaire" title="seminaire" / -->       
         <h3>séminaire : Les Journées du management</h3>
       </div>

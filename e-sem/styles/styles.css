@@ -60,21 +60,19 @@
 }
 
 div#navigation  {
+  float:center;
   margin-left: auto;
   margin-right: auto;
   width: 50em;
 }   
    
-
-div#entete  {
+div#titre  {
+  clear:left;
   margin-left: auto;
   margin-right: auto;
   width: 50em;
 }   
-      
-   
-   
-   
+         
 nav ul {
 padding:0;
 margin:0;
@@ -109,4 +107,13 @@ border-color: #696969 #DCDCDC #DCDCDC #696969;
 header { 
  text-align:right;
  display:block;
-}
+ float: right;
+ margin-top: 0.45em;
+ font-size: 0.9em; 
+ padding:5px;
+ border-width:2px;
+ border-style:solid;
+ border-color:#DCDCDC #696969 #696969 #DCDCDC;  /*pour avoir un effet "outset" avec IE*/
+}   
+
+

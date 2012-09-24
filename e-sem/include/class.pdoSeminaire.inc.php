@@ -14,6 +14,10 @@
  */
 
 class PdoSeminaire{
+	
+	static $DEST_MAIL_CREATION_COMPTE = "olivier.capuozzo@gmail.com"; 
+	static $CC_MAIL_CREATION_COMPTE = "Cc:patrice.grand@reseaucerta.org <patricegrand@free.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, eric dondelinger <edondelinger@gmail.com>";
+	
 	private static $serveur='mysql:host=127.0.0.1';
 	private static $bdd='dbname=seminaire';
 	private static $user='seminaire';
@@ -398,4 +402,22 @@ class PdoSeminaire{
 		return TRUE;
 	}
 
+	public function envoyerMail(){
+		$headers ='From: Olivier Capuozzo<olivier.capuozzo@reseaucerta.org>'."\n";
+		$headers .='Reply-To: olivier.capuozzo@reseaucerta.org'."\n";
+		//$headers .= self::$CC_MAIL_CREATION_COMPTE . "\n";
+		$headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
+		$headers .='Content-Transfer-Encoding: 8bit';
+		$destinataire = self::$DEST_MAIL_CREATION_COMPTE;
+		$objet = "[e-seminaire] CREATION COMPTE";
+		$user = (empty($_SESSION['user'])) ? null : $_SESSION['user'];  
+		if ($user) {
+		 $message = "Inscription d'un nouveau participant : " . $user->prenom . ' ' . $user->nom;
+		  $message .= "\nnemail: " .$user->mail;
+		  $message .= "\nDate : " . date('d-m-Y  H:i');		  		  		  
+		 //die('dest:'.$destinataire . ' obj:'. $objet. ' msg: '. $message. ' headers:'. $headers); 
+		 mail($destinataire, $objet, $message, $headers);		
+		}
+	}
+	
 }
