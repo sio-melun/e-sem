@@ -14,7 +14,7 @@
  */
 
 class PdoSeminaire{
-	
+	static $FROM_MAIL_CREATION_COMPTE = "Olivier Capuozzo<olivier.capuozzo@reseaucerta.org>";
 	static $DEST_MAIL_CREATION_COMPTE = "olivier.capuozzo@gmail.com"; 
 	static $CC_MAIL_CREATION_COMPTE = "Cc:patrice.grand@reseaucerta.org <patricegrand@free.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, eric dondelinger <edondelinger@gmail.com>";
 	
@@ -252,6 +252,21 @@ class PdoSeminaire{
 		return $tab;
 	}
 
+	public function getSeminaireByCle($cle){
+		$tab = array();
+		try {
+			$sql = "SELECT * FROM seminaire WHERE cle = :Cle";
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':Cle', $cle);
+			$stmt->execute();
+			$tab = $stmt->fetch();	
+		} catch (Exception $e) {
+			return FALSE;
+		}
+		return $tab;
+	}
+	
+	
 	public function getLesInscrits($atelier, $seminaire){
 		$tab = array();
 		try {
@@ -403,8 +418,9 @@ class PdoSeminaire{
 	}
 
 	public function envoyerMail(){
-		$headers ='From: Olivier Capuozzo<olivier.capuozzo@reseaucerta.org>'."\n";
-		$headers .='Reply-To: olivier.capuozzo@reseaucerta.org'."\n";
+		$seminaire = (empty($_SESSION['cle']) ? null : $this->getSeminaireByCle($_SESSION['cle']));
+		$headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
+		$headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		//$headers .= self::$CC_MAIL_CREATION_COMPTE . "\n";
 		$headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		$headers .='Content-Transfer-Encoding: 8bit';
@@ -413,8 +429,9 @@ class PdoSeminaire{
 		$user = (empty($_SESSION['user'])) ? null : $_SESSION['user'];  
 		if ($user) {
 		 $message = "Inscription d'un nouveau participant : " . $user->prenom . ' ' . $user->nom;
-		  $message .= "\nnemail: " .$user->mail;
-		  $message .= "\nDate : " . date('d-m-Y  H:i');		  		  		  
+		 if ($seminaire) $message .= "\nPour le seminaire : " . $seminaire->nom;
+		 $message .= "\nemail: " .$user->mail;
+		 $message .= "\nDate : " . date('d-m-Y  H:i');		  		  		  
 		 //die('dest:'.$destinataire . ' obj:'. $objet. ' msg: '. $message. ' headers:'. $headers); 
 		 mail($destinataire, $objet, $message, $headers);		
 		}
