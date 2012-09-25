@@ -14,9 +14,13 @@
  */
 
 class PdoSeminaire{
-	static $FROM_MAIL_CREATION_COMPTE = "Olivier Capuozzo<olivier.capuozzo@reseaucerta.org>";
-	static $DEST_MAIL_CREATION_COMPTE = "olivier.capuozzo@gmail.com"; 
-	static $CC_MAIL_CREATION_COMPTE = "Cc:patrice.grand@reseaucerta.org <patricegrand@free.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, eric dondelinger <edondelinger@gmail.com>";
+	
+	// Parametre d'envoi de mail lors de la ceation d'un compte.
+	// TODO : à prendre dans une table de constantes, ou à déterminer selon les roles de participants
+	static $FROM_MAIL_CREATION_COMPTE = "E-SEMINAIRE-NO-REPLY <no-reply@reseaucerta.org>";
+	static $DEST_MAIL_CREATION_COMPTE = "Miriam Benac <miriam.benac@ac-versailles.fr>"; 
+	static $BCC_MAIL_CREATION_COMPTE = "BCC: Olivier Capuozzo <olivier.capuozzo@reseaucerta.org>, patrice.grand@reseaucerta.org <patricegrand@free.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, Eric Dondelinger <edondelinger@gmail.com>, Olivier Korn <olivier.korn@reseaucerta.org>";
+	
 	
 	private static $serveur='mysql:host=127.0.0.1';
 	private static $bdd='dbname=seminaire';
@@ -47,24 +51,6 @@ class PdoSeminaire{
 		}
 		return PdoSeminaire::$monPdoSeminaire;
 	}
-	/**
-	 * Retourne les informations sur les ateliers
-
-	 * @return un tableau associatif jour=>creneau=>atelier
-	 */
-	public function getLesJoursCreneauxAteliers(){
-		$tab = array("jour"=>1,"date"=>"20/10/2012",
-				"creneau"=> array(
-						"num"=>1,"debut"=>"15h30","fin"=>"17h","atelier"=>array(
-								1=>"le managenent",
-								2=>"le demenagement")
-				)
-		);
-			
-		return $tab;
-
-
-	}
 
 	/**
 	 * Retourne les informations sur les academies
@@ -72,8 +58,6 @@ class PdoSeminaire{
 	 * @return un tableau d'academie
 	 */
 	public function getLesAcademies(){
-		//$tab= array(1=>"Créteil",2=>"Paris",3=>"Versailles");
-
 		$sql = 'SELECT * FROM academie';
 		$stmt = self::$monPdo->prepare($sql);
 		$stmt->execute();
@@ -120,8 +104,6 @@ class PdoSeminaire{
 		return $desSeances;
 
 	}
-
-
 
 	static function jourFr($jour){
 		$jours = array('Lundi','Mardi','Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche');
@@ -347,7 +329,7 @@ class PdoSeminaire{
 			$seminaire = $stmt->fetch(PDO::FETCH_OBJ);
 			if ($user) $user->seminaire=$seminaire;
 				
-			$okcle = !empty($seminaire);// ($cle == '123') ? true : false;
+			$okcle = !empty($seminaire);
 				
 			if ($user && $okcle) {
 				$sql = "SELECT priseEnCharge FROM participer WHERE idSeminaire=:idS AND idParticipant=:idP";				
@@ -443,7 +425,7 @@ class PdoSeminaire{
 		$headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		// TODO no-reply mail !
 		$headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
-// 		$headers .= self::$CC_MAIL_CREATION_COMPTE . "\n";
+ 		$headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";
 		$headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		$headers .='Content-Transfer-Encoding: 8bit';
 		$destinataire = self::$DEST_MAIL_CREATION_COMPTE;
@@ -455,9 +437,10 @@ class PdoSeminaire{
 		 	$message .= "\nPour le seminaire : " . $user->seminaire->nom;
 		 	$message .= ' ('. $this->getNbInscritsSeminaire($user->seminaire->id).' participant(s))';
 		 }
-		 $message .= "\nNom : " . $user->prenom . ' ' . $user->nom;
+		 $message .= "\nNom  : " . $user->prenom . ' ' . $user->nom;
 		 $message .= "\nemail: " .$user->mail;
-		 $message .= "\nDate : " . date('d-m-Y  H:i');		  		  		  
+		 $message .= "\nDate : " . date('d-m-Y  H:i');
+		 $message .= "\nURL  : " . $url;
 		 //die('dest:'.$destinataire . ' obj:'. $objet. ' msg: '. $message. ' headers:'. $headers); 
 		 mail($destinataire, $objet, $message, $headers);
 		 
@@ -465,9 +448,10 @@ class PdoSeminaire{
 		 $headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		 // TODO no-reply mail !
 		 $headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
+		 $headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";		 
 		 $headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		 $headers .='Content-Transfer-Encoding: 8bit';
-		 $message = "Vous êtes inscrits à : " . $url;
+		 $message = "Vous êtes inscrit à : " . $url;
 		 mail($user->mail, $objet, $message, $headers);
 		}
 	}
