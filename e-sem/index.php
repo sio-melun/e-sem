@@ -21,9 +21,9 @@ switch($action){
 		break;
 	case 'doLogin' :
 		$email = (empty($_POST['email']) ? null : $_POST['email']);
-		$email = strip_tags($email);
+		$email = strtolower(trim(strip_tags($email)));
 		$cle   = (empty($_POST['cle']) ? null : $_POST['cle']);
-		$cle = strip_tags($cle);
+		$cle = trim(strip_tags($cle));
 		if (!$email || !$cle) {
 			header('Location: index.php?action=login');
 			exit(1);
@@ -93,13 +93,13 @@ switch($action){
 		}
 		break;
 	case 'validerInformationsPersonnelles':
-		$nom = strip_tags($_POST['nom']);
-		$prenom=strip_tags($_POST['prenom']);
-		$mail=strip_tags($_POST['mail']);
+		$nom = trim(strip_tags($_POST['nom']));
+		$prenom=trim(strip_tags($_POST['prenom']));
+		$mail=strtolower(trim(strip_tags($_POST['mail'])));
 		$titre=strip_tags($_POST['titre']);
 		$academie = strip_tags($_POST['academie']);
-		$residencepersonnelle=strip_tags($_POST['residencepersonnelle']);
-		$residenceadministrative=strip_tags($_POST['residenceadministrative']);
+		$residencepersonnelle=trim(strip_tags($_POST['residencepersonnelle']));
+		$residenceadministrative=trim(strip_tags($_POST['residenceadministrative']));
 		$priseEnCharge=strip_tags($_POST['priseencharge']);
 		if (!$nom || !$prenom || !$mail || !$titre || !$academie || !$residenceadministrative || !$residencepersonnelle ){
 			header('Location: index.php?action=login');

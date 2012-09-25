@@ -432,10 +432,18 @@ class PdoSeminaire{
 		return TRUE;
 	}
 
-	public function envoyerMail(){		
+	public function envoyerMail(){
+
+		$domain = $_SERVER['HTTP_HOST'];
+		$path = $_SERVER['SCRIPT_NAME'];
+		$http = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://');
+		$url = $http  . $domain . $path;
+		
+		
 		$headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
+		// TODO no-reply mail !
 		$headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
-		$headers .= self::$CC_MAIL_CREATION_COMPTE . "\n";
+// 		$headers .= self::$CC_MAIL_CREATION_COMPTE . "\n";
 		$headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		$headers .='Content-Transfer-Encoding: 8bit';
 		$destinataire = self::$DEST_MAIL_CREATION_COMPTE;
@@ -451,7 +459,16 @@ class PdoSeminaire{
 		 $message .= "\nemail: " .$user->mail;
 		 $message .= "\nDate : " . date('d-m-Y  H:i');		  		  		  
 		 //die('dest:'.$destinataire . ' obj:'. $objet. ' msg: '. $message. ' headers:'. $headers); 
-		 mail($destinataire, $objet, $message, $headers);		
+		 mail($destinataire, $objet, $message, $headers);
+		 
+		 // mail à l'utilisateur
+		 $headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
+		 // TODO no-reply mail !
+		 $headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
+		 $headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
+		 $headers .='Content-Transfer-Encoding: 8bit';
+		 $message = "Vous êtes inscrits à : " . $url;
+		 mail($user->mail, $objet, $message, $headers);
 		}
 	}
 	
