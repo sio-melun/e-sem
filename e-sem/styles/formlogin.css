@@ -29,7 +29,15 @@ body{
     box-shadow:rgba(0,0,0,0.15) 0 0 1px;
     color:#444;
     font:normal 14px/16px Arial, Helvetica, Sans-serif;
-    margin:0 auto 30px;
+    /*margin:0 auto 30px;*/
+    
+    clear:left;
+    
+    /*float:center;*/
+  
+  margin-left: auto;
+  margin-right: auto; 
+  width: 45em; /*em;*/
 	overflow:hidden;
 }
 
@@ -46,8 +54,8 @@ body{
 
 .login
 {
-	height:260px; /*260px;*/
-  width: 70%/*430px; *//*332px;*/
+	height:360px; /*260px;*/
+  width: 30%/*430px; *//*332px;*/
 	/*position:absolute;*/
 	/*left:40%;*/
 	/*top:250px;*/
@@ -92,7 +100,7 @@ body{
 }
 .box footer input[type=checkbox]{
 	vertical-align:sub;
-	*vertical-align:middle;
+	vertical-align:middle;
 	margin-right:10px;
 }
 .box input[type=text],
@@ -110,7 +118,7 @@ body{
     box-shadow:2px 3px 3px rgba(0, 0, 0, 0.06) inset, 0 0 1px #95a2a7 inset;
     margin:3px 0 4px;
     padding:8px 6px;
-    width:65%;/*340px;*/
+    width:80%;/*340px;*/
     display:block;
 }
 .box input[type=text]:focus,

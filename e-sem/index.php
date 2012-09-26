@@ -22,6 +22,10 @@ switch($action){
 	case 'doLogin' :
 		$email = (empty($_POST['email']) ? null : $_POST['email']);
 		$email = strtolower(trim(strip_tags($email)));
+		$emailBis = (empty($_POST['emailbis']) ? null : $_POST['emailbis']);
+		$emailBis = strtolower(trim(strip_tags($emailBis)));
+		$presentEmailBis = isset($_POST['emailbis']);
+
 		$cle   = (empty($_POST['cle']) ? null : $_POST['cle']);
 		$cle = trim(strip_tags($cle));
 		if (!$email || !$cle) {
@@ -33,20 +37,31 @@ switch($action){
 		if (!$okUser[0]) {
 			if (!$okUser[1]) {
 				// email inconnu et cle mauvaise....
+				$_SESSION['doLogin_email']=$email;
 				header('Location: index.php?action=login');
 				exit(1);
 			}else{
 				// email inconnu et bonne cle....
 				// présente le formulaire d'enregistrement participant (et non les inscriptions !)
 				$_SESSION['doLogin_email']=$email;
-				$_SESSION['cle'] = $cle;
-				header('Location: index.php?action=demandeInscription');
-				exit(1);
+				if (!$presentEmailBis || ($email != $emailBis)){
+					// verifie concordance des mails
+					$_SESSION['doLogin_email']=$email;
+					$_SESSION['doLogin_emailbis']='';
+					$_SESSION['doLogin_cle']=$cle;
+					header('Location: index.php?action=login');
+					exit(1);
+				} else {
+					// présente le formulaire d'enregistrement participant (et non les inscriptions !)
+					$_SESSION['cle'] = $cle;
+					header('Location: index.php?action=demandeInscription');
+					exit(1);
+				}
 			}
 		} elseif (!$okUser[1]) {
 			// email connu mais mauvaise cle ....
 			$_SESSION['doLogin_email']=$email;
-			$_SESSION['doLogin_cle']='Cle invalide';
+			$_SESSION['doLogin_cle']='';
 			header('Location: index.php?action=login');
 			exit(1);
 		}
@@ -80,12 +95,12 @@ switch($action){
 		include('vues/v_entete.php');
 		require('vues/v_seances.php');
 		break;
-		
-	case 'majinfosperso':		
+
+	case 'majinfosperso':
 	case 'demandeInscription':
 		if (!empty($_SESSION['cle'])){// && !empty($_SESSION['user'])) {
 			$lesAcademies = $pdo->getLesAcademies();
-			include('vues/v_entete.php');			
+			include('vues/v_entete.php');
 			include('vues/v_informations.php');
 		}else{
 			header('Location: index.php');
@@ -101,6 +116,7 @@ switch($action){
 		$residencepersonnelle=trim(strip_tags($_POST['residencepersonnelle']));
 		$residenceadministrative=trim(strip_tags($_POST['residenceadministrative']));
 		$priseEnCharge=strip_tags($_POST['priseencharge']);
+
 		if (!$nom || !$prenom || !$mail || !$titre || !$academie || !$residenceadministrative || !$residencepersonnelle ){
 			header('Location: index.php?action=login');
 			exit(1);
@@ -109,30 +125,30 @@ switch($action){
 		if (empty($_SESSION['user'])) {
 			// vérifier si le mail n'est pas déjà enregistré
 			$okUser = $pdo->getUser($mail, $_SESSION['cle']);
-	    if (!$okUser[0] && $okUser[1]) {
-	  	  // nouveau participant avec clé de séminaire valide
-	  	  $pdo->enregParticipant($nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre, $priseEnCharge);
-  	  	//$pdo->envoyerMail($mail);
-	    }
+			if (!$okUser[0] && $okUser[1]) {
+				// nouveau participant avec clé de séminaire valide
+				$pdo->enregParticipant($nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre, $priseEnCharge);
+				//$pdo->envoyerMail($mail);
+			}
 		} else {
 			//mis à jour
 			$majUser = true;
 			$user = $_SESSION['user'];
 			$pdo->majParticipant($user, $nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre, $priseEnCharge);
-			$mail = $user->mail;			
-		}	
+			$mail = $user->mail;
+		}
 		$okUser = $pdo->getUser($mail, $_SESSION['cle']);
-		if ($okUser[0]) {			
+		if ($okUser[0]) {
 			$_SESSION['user']=$okUser[0];
 			if (!$majUser) // creation => envoi de mail
 				$pdo->envoyerMail();
 			header('Location: index.php?action=seances');
 			exit(1);
-		} else {			
+		} else {
 			$_SESSION['erreur'] = "Echec à l'ennregistemernt";
 			header('Location: index.php?action=login');
 			exit(1);
-		}		
+		}
 		break;
 	case 'export':
 		if (empty($_SESSION['user'])) {

@@ -18,12 +18,13 @@ function verifier(form)
         tabErreur[numeroErreur]="Veuillez saisir le champ prénom svp"; 
         numeroErreur++; 
     } 
-    if(document.getElementById("mail").value.length==0) 
+/*    if(document.getElementById("mail").value.length==0) 
     { 
         ok=false;
         tabErreur[numeroErreur]="Veuillez saisir le champ mail svp"; 
         numeroErreur++; 
     }
+    
     var regex = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
    if(regex.test(document.getElementById("mail").value) == false)
        {
@@ -31,6 +32,7 @@ function verifier(form)
         tabErreur[numeroErreur]="L'adresse mail est invalide"; 
         numeroErreur++;  
        }
+   */   
     if(document.getElementById("residencepersonnelle").value.length==0) 
     { 
         ok=false;
@@ -116,15 +118,16 @@ $priseencharge= (!empty($user->participer)) ? $user->participer->priseEnCharge :
 	<div class="corpsForm">
 		<input type="hidden" name="action" value="validerInformationsPersonnelles" />
 		<fieldset class="boxBody"> <legend>Vos informations personnelles</legend>
-
+<div>
 				<label for="nom">* Nom : </label> <input type="text" id="nom"
 					name="nom" size="30" maxlength="50" <?php if ($nom) echo 'value="'.$nom.'"'?>  />
 
 				<label for="prenom">* Prénom : </label> <input type="text"
 					id="prenom" name="prenom" size="30" maxlength="50" <?php if ($prenom) echo 'value="'.$prenom.'"'?> />
 					
-				<label for="mail">* Mail : </label> <input type="text" id="mail"
-					name="mail" size="30" maxlength="50" value="<?php echo $mail ?>"  />
+				<label for="maildisabled">* Mail : </label> <input type="text" id="maildisabled"
+					name="maildisabled" size="30" maxlength="50" value="<?php echo $mail ?>" disabled  />
+					<input type="hidden" name="mail" size="30" maxlength="50" value="<?php echo $mail ?>" />
 				<label for="academie">Académie : </label> <select id="academie"
 					name="academie" size="1" class='cjComboBox' >
 					<?php
@@ -147,8 +150,9 @@ $priseencharge= (!empty($user->participer)) ? $user->participer->priseEnCharge :
 				Titre : <input type="radio" name="titre" value="professeur" <?php if ($titre=="professeur") echo checked ?> />Professeur 
 				<input type="radio"  name="titre" value="ipr" <?php if ($titre=="ipr") echo checked ?>>IA-IPR 
 				<input type="radio"  name="titre" value="ien" <?php if ($titre=="ien") echo checked ?> >IEN
+			
 			</div>
-			<br />
+			<br/> <br/>
 		<fieldset>
 		<legend>Prise en charge du séminaire </legend>
 		<input type="radio" id="priseencharge" name="priseencharge"

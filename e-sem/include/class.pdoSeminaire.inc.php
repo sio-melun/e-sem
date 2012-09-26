@@ -1,14 +1,12 @@
 <?php
 /**
- * Classe d'accès aux données.
+ * Classe d'accès aux données et plus encore...
 
  * Utilise les services de la classe PDO
- * Les attributs sont tous statiques,
- * les 4 premiers pour la connexion
  * $monPdo de type PDO
  * $monPdoSeminaire qui contiendra l'unique instance de la classe
  * @package default
- * @author Cheri Bibi
+ * @author certa
  * @version    1.0
  * @link       http://www.php.net/manual/fr/book.pdo.php
  */
@@ -18,9 +16,9 @@ class PdoSeminaire{
 	// Parametre d'envoi de mail lors de la ceation d'un compte.
 	// TODO : à prendre dans une table de constantes, ou à déterminer selon les roles de participants
 	static $FROM_MAIL_CREATION_COMPTE = "E-SEMINAIRE-NO-REPLY <no-reply@reseaucerta.org>";
-	static $DEST_MAIL_CREATION_COMPTE = "Miriam Benac <miriam.benac@ac-versailles.fr>"; 
-	static $BCC_MAIL_CREATION_COMPTE = "BCC: Olivier Capuozzo <olivier.capuozzo@reseaucerta.org>, patrice.grand@reseaucerta.org <patricegrand@free.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, Eric Dondelinger <edondelinger@gmail.com>, Olivier Korn <olivier.korn@reseaucerta.org>";
-	
+	static $DEST_MAIL_CREATION_COMPTE = "<olivier.capuozzo@gmail.com>";//"Miriam Benac <miriam.benac@ac-versailles.fr>"; 
+	static $BCC_MAIL_CREATION_COMPTE = "BCC: Olivier Capuozzo <olivier.capuozzo@reseaucerta.org>, Olivier Korn <olivier.korn@reseaucerta.org>";//, patrice.grand@reseaucerta.org <patricegrand@free.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, Eric Dondelinger <edondelinger@gmail.com>, Olivier Korn <olivier.korn@reseaucerta.org>";
+	static $RETURN_PATH = "<olivier.capuozzo@reseaucerta.org>"; 	
 	
 	private static $serveur='mysql:host=127.0.0.1';
 	private static $bdd='dbname=seminaire';
@@ -414,6 +412,15 @@ class PdoSeminaire{
 		return TRUE;
 	}
 
+	
+	function getRealIpAddress() {
+		return !empty($_SERVER['HTTP_CLIENT_IP']) ?
+		$_SERVER['HTTP_CLIENT_IP'] : (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ?
+				$_SERVER['HTTP_X_FORWARDED_FOR'] : (!empty($_SERVER['REMOTE_ADDR']) ?
+						$_SERVER['REMOTE_ADDR'] : null));
+	}
+	
+	
 	public function envoyerMail(){
 
 		$domain = $_SERVER['HTTP_HOST'];
@@ -425,6 +432,7 @@ class PdoSeminaire{
 		$headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		// TODO no-reply mail !
 		$headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
+		$headers .='Return-Path: '. self::$RETURN_PATH ."\n";
  		$headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";
 		$headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		$headers .='Content-Transfer-Encoding: 8bit';
@@ -439,20 +447,22 @@ class PdoSeminaire{
 		 }
 		 $message .= "\nNom  : " . $user->prenom . ' ' . $user->nom;
 		 $message .= "\nemail: " .$user->mail;
+		 $message .= "\nIP   : " . $this->getRealIpAddress();
 		 $message .= "\nDate : " . date('d-m-Y  H:i');
 		 $message .= "\nURL  : " . $url;
-		 //die('dest:'.$destinataire . ' obj:'. $objet. ' msg: '. $message. ' headers:'. $headers); 
-		 mail($destinataire, $objet, $message, $headers);
+		 //die('dest:'.$destinataire . " \nobj:". $objet. "\nmsg: ". $message. "\nheaders:". $headers); 
+		 mail($destinataire, $objet, $message, $headers, '-f '.self::$RETURN_PATH);
 		 
 		 // mail à l'utilisateur
 		 $headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		 // TODO no-reply mail !
 		 $headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
+		 $headers .='Return-Path: '. self::$RETURN_PATH ."\n";
 		 $headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";		 
 		 $headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		 $headers .='Content-Transfer-Encoding: 8bit';
 		 $message = "Vous êtes inscrit à : " . $url;
-		 mail($user->mail, $objet, $message, $headers);
+		 mail($user->mail, $objet, $message, $headers, '-f '.self::$RETURN_PATH);
 		}
 	}
 	
