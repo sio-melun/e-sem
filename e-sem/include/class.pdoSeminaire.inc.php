@@ -16,7 +16,7 @@ class PdoSeminaire{
 	// Parametre d'envoi de mail lors de la ceation d'un compte.
 	// TODO : à prendre dans une table de constantes, ou à déterminer selon les roles de participants
 	static $FROM_MAIL_CREATION_COMPTE = "E-SEMINAIRE-NO-REPLY <no-reply@reseaucerta.org>";
-	static $DEST_MAIL_CREATION_COMPTE = "<olivier.capuozzo@gmail.com>";//"Miriam Benac <miriam.benac@ac-versailles.fr>"; 
+	static $DEST_MAIL_CREATION_COMPTE = "Miriam Benac <miriambenac@yahoo.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, Olivier Capuozzo <olivier.capuozzo@gmail.com>";//"Miriam Benac <miriam.benac@ac-versailles.fr>"; 
 	static $BCC_MAIL_CREATION_COMPTE = "BCC: Olivier Capuozzo <olivier.capuozzo@reseaucerta.org>, Olivier Korn <olivier.korn@reseaucerta.org>";//, patrice.grand@reseaucerta.org <patricegrand@free.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, Eric Dondelinger <edondelinger@gmail.com>, Olivier Korn <olivier.korn@reseaucerta.org>";
 	static $RETURN_PATH = "<olivier.capuozzo@reseaucerta.org>"; 	
 	
@@ -428,12 +428,11 @@ class PdoSeminaire{
 		$http = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://');
 		$url = $http  . $domain . $path;
 		
-		
 		$headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		// TODO no-reply mail !
 		$headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		$headers .='Return-Path: '. self::$RETURN_PATH ."\n";
- 		$headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";
+ 		//$headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";
 		$headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		$headers .='Content-Transfer-Encoding: 8bit';
 		$destinataire = self::$DEST_MAIL_CREATION_COMPTE;
@@ -458,7 +457,7 @@ class PdoSeminaire{
 		 // TODO no-reply mail !
 		 $headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		 $headers .='Return-Path: '. self::$RETURN_PATH ."\n";
-		 $headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";		 
+		 //$headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";		 
 		 $headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		 $headers .='Content-Transfer-Encoding: 8bit';
 		 $message = "Vous êtes inscrit à : " . $url;
