@@ -108,6 +108,12 @@ switch($action){
 		}
 		break;
 	case 'validerInformationsPersonnelles':
+		if (isset($_POST['desinscrire']) && isset($_SESSION['user'])) {
+			$pdo->desinscrireParicipantCourant($_SESSION['user']);
+			session_destroy();
+			header('Location: index.php?action=login');
+			exit;
+		}
 		$nom = trim(strip_tags($_POST['nom']));
 		$prenom=trim(strip_tags($_POST['prenom']));
 		$mail=strtolower(trim(strip_tags($_POST['mail'])));

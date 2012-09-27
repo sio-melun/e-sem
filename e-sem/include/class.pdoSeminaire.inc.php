@@ -12,14 +12,14 @@
  */
 
 class PdoSeminaire{
-	
+
 	// Parametre d'envoi de mail lors de la ceation d'un compte.
 	// TODO : à prendre dans une table de constantes, ou à déterminer selon les roles de participants
 	static $FROM_MAIL_CREATION_COMPTE = "E-SEMINAIRE-NO-REPLY <no-reply@reseaucerta.org>";
-	static $DEST_MAIL_CREATION_COMPTE = "Miriam Benac <miriambenac@yahoo.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, Olivier Capuozzo <olivier.capuozzo@gmail.com>";//"Miriam Benac <miriam.benac@ac-versailles.fr>"; 
+	static $DEST_MAIL_CREATION_COMPTE = "Miriam Benac <miriambenac@yahoo.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, Olivier Capuozzo <olivier.capuozzo@gmail.com>";//"Miriam Benac <miriam.benac@ac-versailles.fr>";
 	static $BCC_MAIL_CREATION_COMPTE = "BCC: Olivier Capuozzo <olivier.capuozzo@reseaucerta.org>, Olivier Korn <olivier.korn@reseaucerta.org>";//, patrice.grand@reseaucerta.org <patricegrand@free.fr>, Eric Deschaintre <eric.deschaintre@reseaucerta.org>, Eric Dondelinger <edondelinger@gmail.com>, Olivier Korn <olivier.korn@reseaucerta.org>";
-	static $RETURN_PATH = "<olivier.capuozzo@reseaucerta.org>"; 	
-	
+	static $RETURN_PATH = "<olivier.capuozzo@reseaucerta.org>";
+
 	private static $serveur='mysql:host=127.0.0.1';
 	private static $bdd='dbname=seminaire';
 	private static $user='seminaire';
@@ -239,14 +239,14 @@ class PdoSeminaire{
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':Cle', $cle);
 			$stmt->execute();
-			$obj = $stmt->fetch(PDO::FETCH_OBJ);	
+			$obj = $stmt->fetch(PDO::FETCH_OBJ);
 		} catch (Exception $e) {
 			return FALSE;
 		}
 		return $obj;
 	}
-	
-	
+
+
 	public function getLesInscrits($atelier, $seminaire){
 		$tab = array();
 		try {
@@ -275,7 +275,7 @@ class PdoSeminaire{
 		}
 		return $resu->nombre;
 	}
-	
+
 	public function getNbInscritsSeminaire($idSeminaire){
 		$resu = 0;
 		try {
@@ -289,7 +289,7 @@ class PdoSeminaire{
 		}
 		return $resu->nombre;
 	}
-	
+
 
 	public function getLesSeminaires(){
 		$tab = array();
@@ -319,18 +319,18 @@ class PdoSeminaire{
 			$stmt->bindParam(':idM', $email);
 			$stmt->execute();
 			$user = $stmt->fetch(PDO::FETCH_OBJ);
-				
+
 			$sql = "SELECT * FROM seminaire WHERE cle=:idCle";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':idCle', $cle);
 			$stmt->execute();
 			$seminaire = $stmt->fetch(PDO::FETCH_OBJ);
 			if ($user) $user->seminaire=$seminaire;
-				
+
 			$okcle = !empty($seminaire);
-				
+
 			if ($user && $okcle) {
-				$sql = "SELECT priseEnCharge FROM participer WHERE idSeminaire=:idS AND idParticipant=:idP";				
+				$sql = "SELECT priseEnCharge FROM participer WHERE idSeminaire=:idS AND idParticipant=:idP";
 				$stmt = self::$monPdo->prepare($sql);
 				$stmt->bindParam(':idS', $seminaire->id);
 				$stmt->bindParam(':idP', $user->id);
@@ -360,7 +360,7 @@ class PdoSeminaire{
 			$stmt->bindParam(':ResAdmi', $resAdmi);
 			$stmt->bindParam(':ResDom', $resDom);
 			$stmt->execute();
-				
+
 			$idParticipant = self::$monPdo->lastInsertId();
 			// TODO idSeminaire
 			$idSeminaire = (empty($_SESSION['idSeminaire'])) ? 1 : $_SESSION['idSeminaire'];
@@ -370,9 +370,9 @@ class PdoSeminaire{
 			$stmt->bindParam(':idP', $idParticipant);
 			$stmt->bindParam(':idS', $idSeminaire);
 			$stmt->bindParam(':PriseEnCharge', $prisencharge);
-				
+
 			$stmt->execute();
-				
+
 			self::$monPdo->commit();
 		} catch (Exception $e) {
 			//		echo $e->getMessage();
@@ -397,9 +397,9 @@ class PdoSeminaire{
 
 			//TODO valeur par défaut ?? no !
 			$idSeminaire = (empty($user->seminaire)) ? 1 : $user->seminaire->id;
-				
+
 			$sql = "UPDATE participer SET priseEnCharge=:PriseEnCharge WHERE idParticipant=:idP AND idSeminaire=:idS";
-//  			die($sql . ' (v= ' .$priseEnCharge . 'idP =' . $user->id.' idS=' .$idSeminaire .')');
+			//  			die($sql . ' (v= ' .$priseEnCharge . 'idP =' . $user->id.' idS=' .$idSeminaire .')');
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':PriseEnCharge', $priseEnCharge);
 			$stmt->bindParam(':idP', $user->id);
@@ -412,32 +412,32 @@ class PdoSeminaire{
 		return TRUE;
 	}
 
-	
+
 	function getRealIpAddress() {
 		return !empty($_SERVER['HTTP_CLIENT_IP']) ?
 		$_SERVER['HTTP_CLIENT_IP'] : (!empty($_SERVER['HTTP_X_FORWARDED_FOR']) ?
 				$_SERVER['HTTP_X_FORWARDED_FOR'] : (!empty($_SERVER['REMOTE_ADDR']) ?
 						$_SERVER['REMOTE_ADDR'] : null));
 	}
-	
-	
+
+
 	public function envoyerMail(){
 
 		$domain = $_SERVER['HTTP_HOST'];
 		$path = $_SERVER['SCRIPT_NAME'];
 		$http = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://');
 		$url = $http  . $domain . $path;
-		
+
 		$headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		// TODO no-reply mail !
 		$headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		$headers .='Return-Path: '. self::$RETURN_PATH ."\n";
- 		//$headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";
+		//$headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";
 		$headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		$headers .='Content-Transfer-Encoding: 8bit';
 		$destinataire = self::$DEST_MAIL_CREATION_COMPTE;
 		$objet = "[e-seminaire] CREATION COMPTE";
-		$user = (empty($_SESSION['user'])) ? null : $_SESSION['user'];  
+		$user = (empty($_SESSION['user'])) ? null : $_SESSION['user'];
 		if ($user) {
 		 $message = "Inscription d'un nouveau participant.";
 		 if ($user->seminaire) {
@@ -449,20 +449,42 @@ class PdoSeminaire{
 		 $message .= "\nIP   : " . $this->getRealIpAddress();
 		 $message .= "\nDate : " . date('d-m-Y  H:i');
 		 $message .= "\nURL  : " . $url;
-		 //die('dest:'.$destinataire . " \nobj:". $objet. "\nmsg: ". $message. "\nheaders:". $headers); 
+		 //die('dest:'.$destinataire . " \nobj:". $objet. "\nmsg: ". $message. "\nheaders:". $headers);
 		 mail($destinataire, $objet, $message, $headers, '-f '.self::$RETURN_PATH);
-		 
+		 	
 		 // mail à l'utilisateur
 		 $headers ='From: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		 // TODO no-reply mail !
 		 $headers .='Reply-To: ' . self::$FROM_MAIL_CREATION_COMPTE ."\n";
 		 $headers .='Return-Path: '. self::$RETURN_PATH ."\n";
-		 //$headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";		 
+		 //$headers .= self::$BCC_MAIL_CREATION_COMPTE . "\n";
 		 $headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		 $headers .='Content-Transfer-Encoding: 8bit';
 		 $message = "Vous êtes inscrit à : " . $url;
 		 mail($user->mail, $objet, $message, $headers, '-f '.self::$RETURN_PATH);
 		}
+	}
+
+	public function desinscrireParicipantCourant($user){
+		try{
+			self::$monPdo->beginTransaction();
+			$sql = "DELETE FROM participer WHERE idParticipant = :idP";
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':idP', $user->id);
+			$stmt->execute();
+			$sql = "DELETE FROM inscription WHERE idParticipant = :idP";
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':idP', $user->id);
+			$stmt->execute();
+			$sql = "DELETE FROM participant WHERE id = :idP";
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':idP', $user->id);
+			$stmt->execute();
+			self::$monPdo->commit();
+		} catch (Exception $e) {
+			return FALSE;
+		}
+		return TRUE;
 	}
 	
 }

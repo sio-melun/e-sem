@@ -1,5 +1,5 @@
 <script type="text/javascript"> 
-function verifier(form) 
+function verifier() 
 { 
     var numeroErreur=0; 
     var ok=true; 
@@ -113,7 +113,7 @@ $residenceadministrative=($user) ? $user->resAdministrative : '';
 $priseencharge= (!empty($user->participer)) ? $user->participer->priseEnCharge : '';
 ?>
 			
-<form class="box inscription" method="POST" action="index.php" 	onSubmit="return verifier(this)">
+<form class="box inscription" method="POST" action="index.php" 	/*onSubmit="return verifier(this)*/">
       
 	<div class="corpsForm">
 		<input type="hidden" name="action" value="validerInformationsPersonnelles" />
@@ -164,6 +164,10 @@ $priseencharge= (!empty($user->participer)) ? $user->participer->priseEnCharge :
 </div>
 <br />
 <div class="piedForm">		
-			<input id="valider" type="submit" value="valider" size="20" />
+	<input id="valider" type="submit" value="valider" size="20" onClick="return verifier();"/>
+	<?php if ($user):?>
+	<input id="desinscrire" type="submit" name="desinscrire" value="me desinscrire" size="20" 
+	onClick="return confirm('Êtes-vous sûr de vouloir supprimer ce compte ?');"/>
+	<?php endif;?>
 </div>
 </form>
