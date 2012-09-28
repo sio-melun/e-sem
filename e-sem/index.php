@@ -121,7 +121,7 @@ switch($action){
 		$academie = strip_tags($_POST['academie']);
 		$residencepersonnelle=trim(strip_tags($_POST['residencepersonnelle']));
 		$residenceadministrative=trim(strip_tags($_POST['residenceadministrative']));
-		$priseEnCharge=strip_tags($_POST['priseencharge']);
+// 		$priseEnCharge=strip_tags($_POST['priseencharge']);
 
 		if (!$nom || !$prenom || !$mail || !$titre || !$academie || !$residenceadministrative || !$residencepersonnelle ){
 			header('Location: index.php?action=login');
@@ -133,14 +133,13 @@ switch($action){
 			$okUser = $pdo->getUser($mail, $_SESSION['cle']);
 			if (!$okUser[0] && $okUser[1]) {
 				// nouveau participant avec clé de séminaire valide
-				$pdo->enregParticipant($nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre, $priseEnCharge);
-				//$pdo->envoyerMail($mail);
+				$pdo->enregParticipant($nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre);//, $priseEnCharge);
 			}
 		} else {
 			//mis à jour
 			$majUser = true;
 			$user = $_SESSION['user'];
-			$pdo->majParticipant($user, $nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre, $priseEnCharge);
+			$pdo->majParticipant($user, $nom,$prenom,$mail,$academie, $residenceadministrative, $residencepersonnelle, $titre);//, $priseEnCharge);
 			$mail = $user->mail;
 		}
 		$okUser = $pdo->getUser($mail, $_SESSION['cle']);

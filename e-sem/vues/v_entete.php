@@ -54,5 +54,5 @@ if (!empty($_SESSION['user'])) {
     <br/>
       <div id="titre">       
         <!-- img src="./images/seminairelogo.jpg" id="logoseminaire" alt="seminaire" title="seminaire" / -->       
-        <h3>séminaire : Les Journées du management</h3>
+        <h3>séminaire : « Les Journées du management »</h3>
       </div>

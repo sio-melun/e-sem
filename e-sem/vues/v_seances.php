@@ -110,7 +110,7 @@ Vous êtes inscrit(e) à <?php echo ($statNbInscr+0) ?> séances
     </td>
 	 <td id='<?php print($seance['id']) ?>'><?php print($seance['dispo']) ?> / <?php print($seance['nbMax']) ?> <?php if ($seance['dispo']<=0) echo '(complet)'?> </td>
 	 <td> <?php print($seance['type']);  echo ($seance['type']=='atelier') ? '  <img src="images/atelier.png" alt="atelier" height="20" width="20" />': '' ?></td>
-	 <td><?php if (++$numLigneMemeHoraire ==1) { print($seance['dateHeureDebut'] . ' - ' . $seance['dateHeureFin']); } ?> </td>
+	 <td><?php /*if (++$numLigneMemeHoraire ==1) { */ print($seance['dateHeureDebut'] . ' - ' . $seance['dateHeureFin']); /*}*/ ?> </td>
    <td><?php print('('.$seance["numRelatif"] . ') ' . $seance['libelle']) ?> </td>
    <td><?php print($seance['intervenants']) ?> </td>
    <?php $oldIdS = $seance['id']; $oldDateHeureDebut = $seance['dateHeureDebut'];?>

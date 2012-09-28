@@ -149,10 +149,11 @@ $priseencharge= (!empty($user->participer)) ? $user->participer->priseEnCharge :
 				<br />
 				Titre : <input type="radio" name="titre" value="professeur" <?php if ($titre=="professeur") echo checked ?> />Professeur 
 				<input type="radio"  name="titre" value="ipr" <?php if ($titre=="ipr") echo checked ?>>IA-IPR 
-				<input type="radio"  name="titre" value="ien" <?php if ($titre=="ien") echo checked ?> >IEN
-			
+				<input type="radio"  name="titre" value="ien" <?php if ($titre=="ien") echo checked ?> >IEN 
+				<input type="radio"  name="titre" value="autre" <?php if ($titre=="autre") echo checked ?> >Autre			
 			</div>
 			<br/> <br/>
+		<!-- 
 		<fieldset>
 		<legend>Prise en charge du séminaire </legend>
 		<input type="radio" id="priseencharge" name="priseencharge"
@@ -160,14 +161,15 @@ $priseencharge= (!empty($user->participer)) ? $user->participer->priseEnCharge :
 			id="priseencharge" name="priseencharge" value="partenaire" <?php if ($priseencharge=='partenaire') echo 'checked' ?>>Partenaire
 		<input type="radio" id="priseencharge" name="priseencharge" value="autre" <?php if ($priseencharge=='autre') echo 'checked' ?>>Autre
 			</fieldset>
+			 -->
 </fieldset>
 </div>
 <br />
 <div class="piedForm">		
 	<input id="valider" type="submit" value="valider" size="20" onClick="return verifier();"/>
 	<?php if ($user):?>
-	<input id="desinscrire" type="submit" name="desinscrire" value="me desinscrire" size="20" 
-	onClick="return confirm('Êtes-vous sûr de vouloir supprimer ce compte ?');"/>
+	<input id="desinscrire" type="submit" name="desinscrire" value="me désinscrire" size="20" 
+	onClick="return confirm('Êtes-vous sûr de vouloir supprimer ce compte et toutes ses données référentes ?');"/>
 	<?php endif;?>
 </div>
 </form>

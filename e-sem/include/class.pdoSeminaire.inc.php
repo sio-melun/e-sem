@@ -347,7 +347,7 @@ class PdoSeminaire{
 
 	}
 
-	public function enregParticipant($nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre, $prisencharge){
+	public function enregParticipant($nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre /*, $prisencharge */){
 		try {
 			self::$monPdo->beginTransaction();
 			$sql = "INSERT INTO participant(nom, prenom,mail,idAcademie,resAdministrative,resFamilliale,titre) VALUES (:Nom,  :Prenom, :Mail, :Academie, :ResAdmi, :ResDom, :Titre)";
@@ -365,11 +365,11 @@ class PdoSeminaire{
 			// TODO idSeminaire
 			$idSeminaire = (empty($_SESSION['idSeminaire'])) ? 1 : $_SESSION['idSeminaire'];
 
-			$sql = "INSERT INTO participer VALUES (:idP,  :idS, :PriseEnCharge)";
+			$sql = "INSERT INTO participer VALUES (:idP,  :idS)";//, :PriseEnCharge)";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':idP', $idParticipant);
 			$stmt->bindParam(':idS', $idSeminaire);
-			$stmt->bindParam(':PriseEnCharge', $prisencharge);
+			//$stmt->bindParam(':PriseEnCharge', $prisencharge);
 
 			$stmt->execute();
 
@@ -381,7 +381,7 @@ class PdoSeminaire{
 		return TRUE;
 	}
 
-	public function majParticipant($user, $nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre, $priseEnCharge){
+	public function majParticipant($user, $nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre/*, $priseEnCharge*/){
 		try {
 			$sql = "UPDATE participant SET nom=:Nom, prenom=:Prenom,mail=:Mail,idAcademie=:Academie,resAdministrative=:ResAdmi,resFamilliale=:ResDom,titre=:Titre WHERE id=:idP";
 			$stmt = self::$monPdo->prepare($sql);
@@ -397,7 +397,7 @@ class PdoSeminaire{
 
 			//TODO valeur par défaut ?? no !
 			$idSeminaire = (empty($user->seminaire)) ? 1 : $user->seminaire->id;
-
+/*
 			$sql = "UPDATE participer SET priseEnCharge=:PriseEnCharge WHERE idParticipant=:idP AND idSeminaire=:idS";
 			//  			die($sql . ' (v= ' .$priseEnCharge . 'idP =' . $user->id.' idS=' .$idSeminaire .')');
 			$stmt = self::$monPdo->prepare($sql);
@@ -405,7 +405,7 @@ class PdoSeminaire{
 			$stmt->bindParam(':idP', $user->id);
 			$stmt->bindParam(':idS', $idSeminaire);
 			$stmt->execute();
-
+*/
 		} catch (Exception $e) {
 			return FALSE;
 		}
@@ -461,6 +461,12 @@ class PdoSeminaire{
 		 $headers .='Content-Type: text/plain; charset="UTF-8"'."\n";
 		 $headers .='Content-Transfer-Encoding: 8bit';
 		 $message = "Vous êtes inscrit à : " . $url;
+		 if ($user->seminaire) {
+		 	$message .= "\nPour le seminaire : " . $user->seminaire->nom;		 	
+		 }
+		 $message .= "\nNom  : " . $user->prenom . ' ' . $user->nom;
+		 $message .= "\nemail: " .$user->mail;
+		 $message .= "\nDate : " . date('d-m-Y  H:i');
 		 mail($user->mail, $objet, $message, $headers, '-f '.self::$RETURN_PATH);
 		}
 	}
