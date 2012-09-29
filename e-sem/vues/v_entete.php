@@ -8,7 +8,7 @@ if (!empty($_SESSION['user'])) {
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
   <head>
-    <title>E-Séminaire : gestion des inscriptions</title>
+    <title>E-Seminaire : gestion des inscriptions</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" type="text/css" href="styles/styles.css" />
     <link rel="stylesheet" type="text/css" href="styles/jquery-ui.css" />
