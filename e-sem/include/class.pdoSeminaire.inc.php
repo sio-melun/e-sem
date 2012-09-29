@@ -155,7 +155,7 @@ class PdoSeminaire{
 			$stmt->bindParam(':idP', $idParticipant);
 			$stmt->execute();
 
-			$sql = "INSERT INTO inscription VALUES (:idP,  :idS)";
+			$sql = "INSERT INTO inscription(idParticipant, idSeance) VALUES (:idP,  :idS)";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':idS', $idSeance);
 			$stmt->bindParam(':idP', $idParticipant);
@@ -365,7 +365,7 @@ class PdoSeminaire{
 			// TODO idSeminaire
 			$idSeminaire = (empty($_SESSION['idSeminaire'])) ? 1 : $_SESSION['idSeminaire'];
 
-			$sql = "INSERT INTO participer VALUES (:idP,  :idS)";//, :PriseEnCharge)";
+			$sql = "INSERT INTO participer(idParticipant, idSeminaire) VALUES (:idP,  :idS)";//, :PriseEnCharge)";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':idP', $idParticipant);
 			$stmt->bindParam(':idS', $idSeminaire);
