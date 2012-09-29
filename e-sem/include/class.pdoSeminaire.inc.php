@@ -220,7 +220,7 @@ class PdoSeminaire{
 	public function getLesSeances($idSemi){
 		$tab = array();
 		try {
-			$sql = "SELECT * FROM seance WHERE idSeminaire = :idS order by dateHeureDebut ASC";
+			$sql = "SELECT * FROM seance WHERE idSeminaire = :idS order by dateHeureDebut ASC, numRelatif ASC";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':idS', $idSemi);
 			$stmt->execute();
@@ -246,13 +246,35 @@ class PdoSeminaire{
 		return $obj;
 	}
 
-
+	/**
+	 * Récupère tous les inscrits à une séance d'un séminaire
+	 * @param $atelier numéro de l'atelier concerné
+	 * @param $seminaire numéro du séminaire concerné
+	 */
 	public function getLesInscrits($atelier, $seminaire){
 		$tab = array();
 		try {
 			$sql = "SELECT participant.nom, participant.prenom, participant.mail, participant.titre, academie.nom acad, participer.priseEnCharge FROM participant, inscription, academie, participer WHERE participant.id = inscription.idParticipant AND idSeance = :IDS AND academie.id = participant.idAcademie AND participer.idParticipant = participant.id AND participer.idSeminaire = :IDSE";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':IDS', $atelier);
+			$stmt->bindParam(':IDSE', $seminaire);
+			$stmt->execute();
+			$tab = $stmt->fetchAll();
+		} catch (Exception $e) {
+			return FALSE;
+		}
+		return $tab;
+	}
+	
+	/**
+	 * Récupère tous les inscrits à un séminaire
+	 * @param $seminaire numéro du séminaire concerné
+	 */
+	public function getLesInscritsSeminaire($seminaire){
+		$tab = array();
+		try {
+			$sql = "SELECT participant.id, participant.nom, participant.prenom, participant.mail, participant.titre, academie.nom acad, participer.priseEnCharge FROM participant, academie, participer WHERE academie.id = participant.idAcademie AND participer.idParticipant = participant.id AND participer.idSeminaire = :IDSE ORDER BY academie.nom ASC, participant.nom ASC";
+			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':IDSE', $seminaire);
 			$stmt->execute();
 			$tab = $stmt->fetchAll();
@@ -290,7 +312,29 @@ class PdoSeminaire{
 		return $resu->nombre;
 	}
 
-
+	/**
+	 * Retourne un booléen pour savoir si une personne est inscrite à une séance
+	 * @param $p la personne à tester
+	 * @param $s la séance à tester
+	 */
+	public function estInscritA($p, $s){
+		$estInscrit = false;
+		try {
+			$sql = "SELECT * from inscription WHERE idParticipant = :IDP AND idSeance = :IDS";
+			$stmt = self::$monPdo->prepare($sql);
+			$stmt->bindParam(':IDP', $p);
+			$stmt->bindParam(':IDS', $s);
+			$stmt->execute();
+			if ($stmt->fetch()){
+				$estInscrit = true;
+			}
+		} catch (Exception $e) {
+			return FALSE;
+		}
+		//echo var_dump($tab);
+		return $estInscrit;
+	}
+	
 	public function getLesSeminaires(){
 		$tab = array();
 		try {
