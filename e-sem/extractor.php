@@ -31,6 +31,10 @@ switch($action){
 		$lesInscriptions = DataSeminaire::extractEtatInscriptionsSeances(strip_tags($_POST['idSeminaire']));
 		require('vues/v_exportEtat.php');
 		break;
+	case 'tousAcad':
+		$lesInscriptions = DataSeminaire::extractTousParticipantParAcad(strip_tags($_POST['idSeminaire']));
+		require('vues/v_exportTousAcad.php');
+		break;
 	default :
 		header('Location: index.php?action=login');
 		exit(1);

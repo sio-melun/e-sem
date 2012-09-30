@@ -72,4 +72,60 @@ public static function extractInscriptionsSeances($idSemi){
 		endforeach;
 		return $liste;
 	}
+	
+	/**
+	 * Fonction retournant une génération d'un fichier CSV récapitulant les inscrits triés par académie (sera utilisé pour produire un CSV servant à l'impression des fiches parcours individuels).
+	 * @param $idSemi identifiant du séminaire dont l'extraction est souhaitée
+	 */
+	public static function extractTousParticipantParAcad($idSemi){
+		$liste = ";;;;;";
+		
+		// génération de l'entête pour les ateliers
+		// récupère toutes les seances
+		$pdoSemi = PdoSeminaire::getInstance();
+		$lesSeances = $pdoSemi->getLesSeances($idSemi);
+		$jourC = "";	// jour Courant dans le parcours des séances
+		$heureC = "";	// idem heure courante
+		$second = ";;;;;";
+		$troisieme = "";
+		foreach ($lesSeances as $seance=>$seances) :
+			// récup du jour de la séances actuellement analysée
+			$jourA = substr($seances['dateHeureDebut'],0,10);
+			$heureA = substr($seances['dateHeureDebut'],11,5);
+			if ($jourA != $jourC){
+				// le jour est écrit dans une colonne
+				$liste .= $jourA.";";
+				$jourC = $jourA;
+			}else{
+				$liste .=";";
+			}
+			// préparation de la seconde ligne
+			if ($heureA != $heureC){
+				// l'horaire est écrit dans une colonne
+				$second .= $heureA.";";
+				$heureC = $heureA;
+			}else{
+				$second .=";";
+			}
+			// troisième ligne
+			$troisieme .= $seances['numRelatif'].";";
+		endforeach;
+		$liste .= "\n".$second."\n"."ACADEMIE;PARTICIPANT;PRISE EN CHARGE;TITRE;COURRIEL;".$troisieme;
+		
+		// Chargement des participants
+		$lesInscrits = $pdoSemi->getLesInscritsSeminaire($idSemi);
+		foreach ($lesInscrits as $inscrit) :
+			$liste .= "\n".$inscrit['acad'].";" . $inscrit['nom'] ." " .$inscrit['prenom'].";".$inscrit['priseEnCharge'].";".$inscrit['titre'].";".$inscrit['mail'];
+			// pour chaque séance de la liste, on va voir si on a une inscription de cette personne et on affiche 1 si c'est le cas dans la cellule
+			foreach ($lesSeances as $seance=>$seances) :
+				if ($pdoSemi->estInscritA($inscrit['id'], $seances['id'])){
+					$liste .= ";1";
+				}else{
+					$liste .= ";";
+				}
+			endforeach;
+		endforeach;
+		
+		return $liste;
+	}
 }

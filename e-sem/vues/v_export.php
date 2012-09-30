@@ -29,6 +29,7 @@ endif;
 			<td><SELECT name="action">
 				<OPTION value="csvEtat">Etat des inscriptions au jour d'aujourd'hui</OPTION>
 				<OPTION value="csvFinale">Liste des inscrits au séminaire</OPTION>
+				<OPTION value="tousAcad">Liste des inscrits parcours personnels</OPTION>
 				</SELECT></td></tr>
 			<tr colspan=2><td><input type="submit" value="OK"/></td></tr>
 		<tbody>  	 
