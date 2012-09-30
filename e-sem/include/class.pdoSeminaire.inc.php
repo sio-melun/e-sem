@@ -247,9 +247,9 @@ class PdoSeminaire{
 	}
 
 	/**
-	 * Récupère tous les inscrits à une séance d'un séminaire
-	 * @param $atelier numéro de l'atelier concerné
-	 * @param $seminaire numéro du séminaire concerné
+	 * Rï¿½cupï¿½re tous les inscrits ï¿½ une sï¿½ance d'un sï¿½minaire
+	 * @param $atelier numï¿½ro de l'atelier concernï¿½
+	 * @param $seminaire numï¿½ro du sï¿½minaire concernï¿½
 	 */
 	public function getLesInscrits($atelier, $seminaire){
 		$tab = array();
@@ -267,8 +267,8 @@ class PdoSeminaire{
 	}
 	
 	/**
-	 * Récupère tous les inscrits à un séminaire
-	 * @param $seminaire numéro du séminaire concerné
+	 * Rï¿½cupï¿½re tous les inscrits ï¿½ un sï¿½minaire
+	 * @param $seminaire numï¿½ro du sï¿½minaire concernï¿½
 	 */
 	public function getLesInscritsSeminaire($seminaire){
 		$tab = array();
@@ -313,9 +313,9 @@ class PdoSeminaire{
 	}
 
 	/**
-	 * Retourne un booléen pour savoir si une personne est inscrite à une séance
-	 * @param $p la personne à tester
-	 * @param $s la séance à tester
+	 * Retourne un boolï¿½en pour savoir si une personne est inscrite ï¿½ une sï¿½ance
+	 * @param $p la personne ï¿½ tester
+	 * @param $s la sï¿½ance ï¿½ tester
 	 */
 	public function estInscritA($p, $s){
 		$estInscrit = false;
@@ -427,7 +427,7 @@ class PdoSeminaire{
 
 	public function majParticipant($user, $nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre/*, $priseEnCharge*/){
 		try {
-			$sql = "UPDATE participant SET nom=:Nom, prenom=:Prenom,mail=:Mail,idAcademie=:Academie,resAdministrative=:ResAdmi,resFamilliale=:ResDom,titre=:Titre WHERE id=:idP";
+			$sql = "UPDATE participant SET nom=:Nom, prenom=:Prenom,mail=:Mail,idAcademie=:Academie,resAdministrative=:ResAdmi,resFamilliale=:ResDom,titre=:Titre, lastUpdate=NOW() WHERE id=:idP";
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':idP', $user->id);
 			$stmt->bindParam(':Nom', $nom);
@@ -466,7 +466,6 @@ class PdoSeminaire{
 
 
 	public function envoyerMail(){
-
 		$domain = $_SERVER['HTTP_HOST'];
 		$path = $_SERVER['SCRIPT_NAME'];
 		$http = (empty($_SERVER['HTTPS']) ? 'http://' : 'https://');
