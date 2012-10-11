@@ -45,12 +45,6 @@ function verifier()
         tabErreur[numeroErreur]="Veuillez saisir la ville de résidence administrative"; 
         numeroErreur++; 
     }  
-    if(document.getElementById("priseencharge").value.length==0) 
-    { 
-        ok=false;
-        tabErreur[numeroErreur]="Veuillez saisir le type de prise en charge"; 
-        numeroErreur++; 
-    }  
 
     var titres = document.getElementsByName('titre');
     
@@ -68,20 +62,7 @@ function verifier()
         numeroErreur++; 
     }  
 
-    var pec = document.getElementsByName('priseencharge');  
-    for ( var i = 0; i < pec.length; i++) {
-        if(pec[i].checked) {
-            ischecked = true;
-        }
-    }
    
-    if(!ischecked)    
-    { 
-        ok=false;
-        tabErreur[numeroErreur]="Veuillez préciser votre prise en charge"; 
-        numeroErreur++; 
-    }  
-
     
     if(!ok) 
     { 
@@ -110,7 +91,6 @@ $titre=($user) ? $user->titre : '';
 $idAcademie = ($user) ? $user->idAcademie : '';
 $residencepersonnelle=($user) ? $user->resFamilliale : '';
 $residenceadministrative=($user) ? $user->resAdministrative : '';
-$priseencharge= (!empty($user->participer)) ? $user->participer->priseEnCharge : '';
 ?>
 			
 <form class="box inscription" method="POST" action="index.php" 	/*onSubmit="return verifier(this)*/">
@@ -153,15 +133,6 @@ $priseencharge= (!empty($user->participer)) ? $user->participer->priseEnCharge :
 				<input type="radio"  name="titre" value="autre" <?php if ($titre=="autre") echo checked ?> >Autre			
 			</div>
 			<br/> <br/>
-		<!-- 
-		<fieldset>
-		<legend>Prise en charge du séminaire </legend>
-		<input type="radio" id="priseencharge" name="priseencharge"
-			value="academie" <?php if ($priseencharge=='academie') echo 'checked' ?>>Académie <input type="radio"
-			id="priseencharge" name="priseencharge" value="partenaire" <?php if ($priseencharge=='partenaire') echo 'checked' ?>>Partenaire
-		<input type="radio" id="priseencharge" name="priseencharge" value="autre" <?php if ($priseencharge=='autre') echo 'checked' ?>>Autre
-			</fieldset>
-			 -->
 </fieldset>
 </div>
 <br />

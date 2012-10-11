@@ -121,6 +121,7 @@ switch($action){
 		$academie = strip_tags($_POST['academie']);
 		$residencepersonnelle=trim(strip_tags($_POST['residencepersonnelle']));
 		$residenceadministrative=trim(strip_tags($_POST['residenceadministrative']));
+	  
 // 		$priseEnCharge=strip_tags($_POST['priseencharge']);
 
 		if (!$nom || !$prenom || !$mail || !$titre || !$academie || !$residenceadministrative || !$residencepersonnelle ){

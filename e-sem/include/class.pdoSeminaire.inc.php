@@ -394,7 +394,10 @@ class PdoSeminaire{
 	public function enregParticipant($nom,$prenom,$mail,$idAcademie, $resAdmi, $resDom, $titre /*, $prisencharge */){
 		try {
 			self::$monPdo->beginTransaction();
-			$sql = "INSERT INTO participant(nom, prenom,mail,idAcademie,resAdministrative,resFamilliale,titre, dateCrea) VALUES (:Nom,  :Prenom, :Mail, :Academie, :ResAdmi, :ResDom, :Titre, NOW())";
+			$sql = "INSERT INTO participant(nom, prenom,mail,idAcademie,resAdministrative,resFamilliale,titre) VALUES (:Nom,  :Prenom, :Mail, :Academie, :ResAdmi, :ResDom, :Titre)";
+			
+			//$dateCrea = date('Y-m-d H:i:s');
+				
 			$stmt = self::$monPdo->prepare($sql);
 			$stmt->bindParam(':Nom', $nom);
 			$stmt->bindParam(':Prenom', $prenom);
@@ -403,9 +406,11 @@ class PdoSeminaire{
 			$stmt->bindParam(':Titre', $titre);
 			$stmt->bindParam(':ResAdmi', $resAdmi);
 			$stmt->bindParam(':ResDom', $resDom);
+			
 			$stmt->execute();
 
 			$idParticipant = self::$monPdo->lastInsertId();
+			
 			// TODO idSeminaire
 			$idSeminaire = (empty($_SESSION['idSeminaire'])) ? 1 : $_SESSION['idSeminaire'];
 
